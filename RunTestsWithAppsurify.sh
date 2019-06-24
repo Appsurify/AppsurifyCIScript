@@ -111,7 +111,7 @@ while [ "$1" != "" ]; do
         -d | --maxtests )      shift
                                maxtests=$1
                                ;;
-        -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify"
+        -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
                                ;;
     esac
