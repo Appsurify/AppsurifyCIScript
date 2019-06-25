@@ -3,7 +3,9 @@
 ## Available arguments
  
 ### Required arguments 
- 
+
+| argument | options |
+| --- | --- |
 | apikey | apikey from appsurify |
 | url | url of the appsurify instance i.e. "https://dummy.appsurify.com" do not end with a / |
 | project | name of the project |
