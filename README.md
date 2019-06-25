@@ -44,3 +44,12 @@ RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdf
 #### Java High Tests
 RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "report" --teststorun "high,medium" --startrun "mvn -Dtest=" --fullname "true" --fullnameseparator "#" --endrun " test" --testseparator ","
 
+
+#### Rspec all tests
+https://github.com/sj26/rspec_junit_formatter must be installed
+Startrun="rspec --format RspecJunitFormatter --out rspec.xml"
+
+
+#### Rspec specific tests
+RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "rspec.xml" --teststorun "high,medium" --startrun "rspec --format RspecJunitFormatter --out rspec.xml -e '" --endrun = "'" --testseparator "' -e '"
+https://relishapp.com/rspec/rspec-core/docs/command-line/example-option
