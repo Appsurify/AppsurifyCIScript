@@ -1,4 +1,4 @@
-# AppsurifyCIScript
+# Appsurify CI Script
 
 ## Available arguments
  
