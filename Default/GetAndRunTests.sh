@@ -10,7 +10,7 @@ execute_tests () {
 if [[ $deletereports == "true" ]] ; then delete_reports ; fi
 $startrun$1$endrun
 echo $startrun$1$endrun
-. ./PushResultsToAppsurify.sh 
+. "$scriptlocation"PushResultsToAppsurify.sh 
 }
 
 get_tests () {
@@ -50,7 +50,7 @@ if [[ $rerun == "true" ]]; then
 failfast_tests () {
 if [[ $failfast == "true" ]] ; then
     rerun_tests $1
-    . ./GetResultsFromAppsurify.sh ; fi       
+    . "$scriptlocation"GetResultsFromAppsurify.sh ; fi       
 }
 
 
@@ -81,7 +81,7 @@ if [[ $finalTestNames != "" ]] ; then execute_tests $finalTestNames ; failfast_t
 #if tests == all just run tests
 if [[ $teststorun == "all" ]] ; then execute_tests "" 0 ; fi
 
-if [[ $teststorun == "none" ]] ; then . ./PushResultsToAppsurify.sh  ; fi
+if [[ $teststorun == "none" ]] ; then . "$scriptlocation"PushResultsToAppsurify.sh  ; fi
 
 index=0
 if [[ $teststorun == *high* ]] ; then testtypes[index]=1 ; ((index++)) ; fi
@@ -101,7 +101,7 @@ done
 
 if [[ $failfast == "false" && $rerun == "true" ]] ; then rerun_tests ; fi
 
-. ./GetResultsFromAppsurify.sh
+. "$scriptlocation"GetResultsFromAppsurify.sh
 #if not then get tests
 
 #run tests

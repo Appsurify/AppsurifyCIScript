@@ -32,6 +32,7 @@ deletereports="false" #options true or false, BE CAREFUL THIS WILL DELETE THE SP
 #startrun needs to end with a space sometimes
 #endrun needs to start with a space sometimes
 commitId=""
+scriptlocation="./"
 
 
 
@@ -111,6 +112,9 @@ while [ "$1" != "" ]; do
         -d | --maxtests )      shift
                                maxtests=$1
                                ;;
+        -d | --scriptlocation )     shift
+                                    scriptlocation=$1
+                                    ;;
         -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
                                ;;
@@ -128,7 +132,7 @@ if [[ $report == *.Xml* ]] ; then reporttype="file" ; fi
 if [[ $report == *.XML* ]] ; then reporttype="file" ; fi
 
 if [[ $url == "" ]] ; then echo "no url specified" ; exit 1 ; fi
-if [[ $apiKey == "" ]] ; then echo "no apiKey specified" ; exit 1 ; fi
+if [[ $apiKey == "" ]] ; then echo "no apikey specified" ; exit 1 ; fi
 if [[ $project == "" ]] ; then echo "no project specified" ; exit 1 ; fi
 if [[ $testsuite == "" ]] ; then echo "no testsuite specified" ; exit 1 ; fi
 if [[ $report == "" ]] ; then echo "no report specified" ; exit 1 ; fi
@@ -146,4 +150,4 @@ echo $commitId
 
 #$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commitId $run_id
 echo "Getting tests to run"
-. ./GetAndRunTests.sh
+. "$scriptlocation"GetAndRunTests.sh
