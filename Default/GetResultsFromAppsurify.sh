@@ -1,3 +1,4 @@
+#!/bin/bash -x
 #get results
 finalRes=`curl --header "token: $apiKey" "$url/api/external/output/?${run_id}" ` ; echo $finalRes
 new_defects=`echo $finalRes | sed 's/\\\\\//\//g' | sed 's/[{}]//g' |tr "," "\n" | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' |  grep -w new_defects ` ; echo $new_defects
