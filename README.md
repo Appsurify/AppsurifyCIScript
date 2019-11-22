@@ -30,7 +30,7 @@
 | maxrerun | 3 | the number of times failed tests should be rerun |
 | failfast | "false" | whether after each set of test runs to determine if the build has failed (tests will still be rerun if this has been selected) |
 | runfrequency | "single" | #options 'single' or 'multiple' determines if the prioritized tests should be for a single commit or mulltiple i.e. since the last test run |
-| branch | "master" | The branch from which you would like to select the commits to get priorized tests for.  Will default to the value of 'git branch | grep \* | cut -d ' ' -f2' if not specified |
+| branch | "master" | The branch from which you would like to select the commits to get priorized tests for.  Will default to the value of 'git branch \| grep \\\* \| cut -d ' ' -f2' if not specified |
 | importtype | "junit" | #options 'junit', 'nunit' or 'trx' |
 | reporttype | "directory" | default directory must end with a /, will look for all xml files in that directory |
 | deletereports | "false" | options true or false, BE CAREFUL THIS WILL DELETE THE SPECIFIC FILE OR ALL XML FILES IN THE DIRECTORY |
