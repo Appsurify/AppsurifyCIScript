@@ -17,7 +17,15 @@ echo $startrun$1$endrun
 get_tests () {
 valuetests=""
 finalTestNames=""
-json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&commit=$commitId" | sed 's/\"//g'`
+
+
+json=""
+if [[ $runfrequency == "single" ]] ; then json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&first_commit=$commitId&commit_type=Single" | sed 's/\"//g'` ; fi
+if [[ $runfrequency == "multiple" ]] ; then json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&first_commit=$commitId&commit_type=LastRun&target_branch=$branch" | sed 's/\"//g'` ; fi
+if [[ $runfrequency == "betweenexclusive" ]] ; then json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&first_commit=$commitId&commit_type=BetweenExclisuve&target_branch=$branch&second_commit=$fromcommit" | sed 's/\"//g'` ; fi
+if [[ $runfrequency == "betweeninclusive" ]] ; then json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&first_commit=$commitId&commit_type=BetweenInclusive&target_branch=$branch&second_commit=$fromcommit" | sed 's/\"//g'` ; fi
+
+#json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&commit=$commitId" | sed 's/\"//g'`
 #echo $json
 prop="name"
 values=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' |tr "," "\n" | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | sed 's/\[//g' | sed 's/\]//g' | sed 's/name://g' `

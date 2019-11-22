@@ -34,12 +34,10 @@ deletereports="false" #options true or false, BE CAREFUL THIS WILL DELETE THE SP
 #endrun needs to start with a space sometimes
 commitId=""
 scriptlocation="./"
-
-
-
-###############
-#atm rerunning tests and fast fail don't work together very well
-##########
+branch=""
+#runfrequency="single" #options single for single commits, lastrun for all commits since the last run, betweeninclusive or betweenexclusive for all commits between two commits either inclusive or exclusive
+runfrequency="single" #options single for single commits, multiple for when there have been multiple commits since the last test run.
+fromcommit=""
 
 
 while [ "$1" != "" ]; do
@@ -110,11 +108,20 @@ while [ "$1" != "" ]; do
         -d | --commitId )      shift
                                commitId=$1
                                ;;
+        -d | --branch )        shift
+                               branch=$1
+                               ;;
         -d | --maxtests )      shift
                                maxtests=$1
                                ;;
         -d | --scriptlocation )     shift
                                     scriptlocation=$1
+                                    ;;
+        -d | --runfrequency )       shift
+                                    runfrequency=$1
+                                    ;;
+        -d | --fromcommit )         shift
+                                    fromcommit=$1
                                     ;;
         -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
@@ -128,6 +135,10 @@ projectencoded=$(urlencode "$project")
 
 if [[ $commitId == "" ]] ; then commitId=`git log -1 --pretty="%H"` ; fi
 
+if [[ $branch == "" ]] ; then branch=`git branch | grep \* | cut -d ' ' -f2` ; fi
+
+
+
 if [[ $report == *.xml* ]] ; then reporttype="file" ; fi
 if [[ $report == *.Xml* ]] ; then reporttype="file" ; fi
 if [[ $report == *.XML* ]] ; then reporttype="file" ; fi
@@ -137,6 +148,8 @@ if [[ $apiKey == "" ]] ; then echo "no apikey specified" ; exit 1 ; fi
 if [[ $project == "" ]] ; then echo "no project specified" ; exit 1 ; fi
 if [[ $testsuite == "" ]] ; then echo "no testsuite specified" ; exit 1 ; fi
 if [[ $report == "" ]] ; then echo "no report specified" ; exit 1 ; fi
+if [[ $runfrequency == "betweeninclusive" && fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweeninclusive" ; exit 1 ; fi
+if [[ $runfrequency == "betweenexclusive" && fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweenexclusive" ; exit 1 ; fi
 #if [[ $teststorun == "" ]] ; then echo "no teststorun specified" ; exit 1 ; fi
 #if [[ $startrun == "" ]] ; then echo "no command used to start running tests specified" ; exit 1 ; fi
 
