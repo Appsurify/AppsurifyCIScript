@@ -134,8 +134,9 @@ testsuiteencoded=$(urlencode "$testsuite")
 projectencoded=$(urlencode "$project")
 
 if [[ $commitId == "" ]] ; then commitId=`git log -1 --pretty="%H"` ; fi
-
-if [[ $branch == "" ]] ; then branch=`git branch | grep \* | cut -d ' ' -f2` ; fi
+#git branch | grep \* | cut -d ' ' -f2
+#git rev-parse --abbrev-ref HEAD
+if [[ $branch == "" ]] ; then branch=`git rev-parse --abbrev-ref HEAD` ; fi
 
 
 
