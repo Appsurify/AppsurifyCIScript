@@ -1,5 +1,8 @@
 # Script to run Sahi tests with Appsurify
 
+# Will generate two files one called temp.dd.csv and anotehr called temp.suite.
+# To run the tests execute testrunner.bat|.sh temp.dd.csv %additionalargs%
+
 # inputs
 # list of tests with format testsuitename#testname,
 # i.e. #teststorun = "ddcsv_dd_csv#test9.sah,ddcsv_dd_csv#test10.sah,sahi_demo_sah#sahi_demo.sah,demo_suite#getwin_popupWithParam.sah"
