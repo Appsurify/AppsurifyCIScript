@@ -136,6 +136,7 @@ projectencoded=$(urlencode "$project")
 if [[ $commitId == "" ]] ; then commitId=`git log -1 --pretty="%H"` ; fi
 #git branch | grep \* | cut -d ' ' -f2
 #git rev-parse --abbrev-ref HEAD
+#https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git
 if [[ $branch == "" ]] ; then branch=`git rev-parse --abbrev-ref HEAD` ; fi
 
 
