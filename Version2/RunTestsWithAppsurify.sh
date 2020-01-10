@@ -12,7 +12,11 @@ urlencode() {
     done
 }
 
-
+# To run tests with sahi
+# edit testrunner.bat or .sh - add line "SET LOGS_INFO=junit:<Directory of your choice>"
+# startrun = 'testrunner.bat or .sh temp.dd.csv' 
+# endrun = ' <additional arguments>'
+# report = directory set when editing the testrunner/index.xml - we only want the index file
 
 maxtests=1000000 #default 10000000
 fail="newdefects, reopeneddefects" #default new defects and reopened defects  #options newdefects, reopeneddefects, flakybrokentests, newflaky, reopenedflaky, failedtests, brokentests
@@ -38,6 +42,10 @@ branch=""
 #runfrequency="single" #options single for single commits, lastrun for all commits since the last run, betweeninclusive or betweenexclusive for all commits between two commits either inclusive or exclusive
 runfrequency="single" #options single for single commits, multiple for when there have been multiple commits since the last test run.
 fromcommit=""
+repository="git"
+scriptlocation="./"
+generatefile="false"
+template="none"
 addtestsuitename="false"
 addclassname="false"
 #--addtestsuitename "true" --testsuitesnameseparator "d" --addclassname "true" --classnameseparator "f"
@@ -137,6 +145,15 @@ while [ "$1" != "" ]; do
         -d | --fromcommit )         shift
                                     fromcommit=$1
                                     ;;
+        -d | --repository )         shift
+                                    repository=$1
+                                    ;;
+        -d | --generatefile )       shift
+                                    generatefile=$1
+                                    ;;
+        -d | --template )       shift
+                                template=$1
+                                ;;
         -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
                                ;;
@@ -177,6 +194,35 @@ run_id=""
 
 
 echo $commitId
+
+########
+#Templates
+########
+
+#Template Sahi
+#testsuitename#testname
+#addtestsuitename=true
+#testsuitesnameseparator=%23
+#Sahi Setup
+#testrunner.bat demo/demo.suite http://sahitest.com/demo/ firefox
+#startrun testrunner.bat temp.dd.csv 
+#endrun as per setup
+#SET LOGS_INFO=junit:<LOCATION>
+#https://sahipro.com/docs/using-sahi/playback-commandline.html
+
+#Sahi Ant
+#https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
+#startrun ant -f demo.xml
+#<property name="scriptName" value="demo/ddcsv/temp.dd.csv"/>
+#<report type="junit" logdir="<LOCATION>"/>
+
+
+if [[ $template == "sahi ant" ]] ; then
+generatesfile="true"
+testseparator=","
+addtestsuitename=true
+testsuitesnameseparator=%23
+; fi
 
 #$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commitId $run_id
 echo "Getting tests to run"

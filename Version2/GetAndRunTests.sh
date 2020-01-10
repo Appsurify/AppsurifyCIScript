@@ -9,9 +9,18 @@ if [[ $reporttype == "file" ]] ; then rm $report ; fi
 
 execute_tests () {
 if [[ $deletereports == "true" ]] ; then delete_reports ; fi
-"python AppsurifySahi.py "$1
-$startrun$endrun
+
+if [[ $generatesfile == "false" ]] ; then 
+    $startrun$1$endrun
+; fi
+
+if [[ $generatesfile != "false" ]] ; then 
+    "python "$scriptlocation"AppsurifySahi.py "$1
+    $startrun$endrun
+; fi
+
 echo $startrun$1$endrun
+
 . "$scriptlocation"PushResultsToAppsurify.sh 
 }
 
@@ -32,7 +41,7 @@ if [[ $runfrequency == "betweenexclusive" && $repository != "git" ]] ; then json
 if [[ $runfrequency == "betweeninclusive" && $repository != "git" ]] ; then json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&testsuitename_separator=$testsuitesnameseparator&testsuitename=$addtestsuitename&classname=$addclassname&classname_separator=$classnameseparator&test_suite_name=$testsuiteencoded&first_commit=$commitId&commit_type=BetweenInclusive&target_branch=$branch&second_commit=$fromcommit&repo=$repository" | sed 's/\"//g'` ; fi
 
 
-#json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&testsuitename_separator=$testsuitesnameseparator&testsuitename=$addtestsuitename&classname=$addclassname&classname_separator=$classnameseparator&test_suite_name=$testsuiteencoded&commit=$commitId" | sed 's/\"//g'`
+#json=`curl --header "token: $apiKey" "$url/api/external/prioritized-tests/?project_name=$projectencoded&priority=$1&full_name=$fullname&test_suite_name=$testsuiteencoded&commit=$commitId" | sed 's/\"//g'`
 #echo $json
 prop="name"
 values=`echo $json | sed 's/\\\\\//\//g' | sed 's/[{}]//g' |tr "," "\n" | sed 's/\"\:\"/\|/g' | sed 's/[\,]/ /g' | sed 's/\"//g' | grep -w $prop | sed 's/\[//g' | sed 's/\]//g' | sed 's/name://g' `

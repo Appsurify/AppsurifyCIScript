@@ -43,6 +43,9 @@ branch=""
 runfrequency="single" #options single for single commits, multiple for when there have been multiple commits since the last test run.
 fromcommit=""
 repository="git"
+addtestsuitename="false"
+addclassname="false"
+#--addtestsuitename "true" --testsuitesnameseparator "d" --addclassname "true" --classnameseparator "f"
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -70,6 +73,18 @@ while [ "$1" != "" ]; do
         -i | --importtype )    shift
                                importtype=$1
                                ;;
+        -r | --addtestsuitename )       shift
+                                        addtestsuitename=$1
+                                        ;;
+        -rt | --testsuitesnameseparator )   shift
+                                            testsuitesnameseparator=$1
+                                            ;;
+        -t | --addclassname )   shift
+                                addclassname=$1
+                                ;;
+        -i | --classnameseparator )     shift
+                                        classnameseparator=$1
+                                        ;;
         -re | --rerun )        shift
                                rerun=$1
                                ;;
@@ -157,8 +172,8 @@ if [[ $apiKey == "" ]] ; then echo "no apikey specified" ; exit 1 ; fi
 if [[ $project == "" ]] ; then echo "no project specified" ; exit 1 ; fi
 if [[ $testsuite == "" ]] ; then echo "no testsuite specified" ; exit 1 ; fi
 if [[ $report == "" ]] ; then echo "no report specified" ; exit 1 ; fi
-if [[ $runfrequency == "betweeninclusive" && fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweeninclusive" ; exit 1 ; fi
-if [[ $runfrequency == "betweenexclusive" && fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweenexclusive" ; exit 1 ; fi
+if [[ $runfrequency == "betweeninclusive" && $fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweeninclusive" ; exit 1 ; fi
+if [[ $runfrequency == "betweenexclusive" && $fromcommit == "" ]] ; then echo "no from commit specified and runfrequency set to betweenexclusive" ; exit 1 ; fi
 #if [[ $teststorun == "" ]] ; then echo "no teststorun specified" ; exit 1 ; fi
 #if [[ $startrun == "" ]] ; then echo "no command used to start running tests specified" ; exit 1 ; fi
 
