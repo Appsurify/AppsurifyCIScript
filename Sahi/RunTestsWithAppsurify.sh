@@ -42,7 +42,7 @@ branch=""
 #runfrequency="single" #options single for single commits, lastrun for all commits since the last run, betweeninclusive or betweenexclusive for all commits between two commits either inclusive or exclusive
 runfrequency="single" #options single for single commits, multiple for when there have been multiple commits since the last test run.
 fromcommit=""
-
+repository="git"
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -126,6 +126,9 @@ while [ "$1" != "" ]; do
                                     ;;
         -d | --fromcommit )         shift
                                     fromcommit=$1
+                                    ;;
+        -d | --repository )         shift
+                                    repository=$1
                                     ;;
         -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
