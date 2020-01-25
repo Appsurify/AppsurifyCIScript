@@ -1,4 +1,4 @@
-#!/bin/bash -x
+f#!/bin/bash -x
 urlencode() {
     # urlencode <string>
 
@@ -12,11 +12,6 @@ urlencode() {
     done
 }
 
-# To run tests with sahi
-# edit testrunner.bat or .sh - add line "SET LOGS_INFO=junit:<Directory of your choice>"
-# startrun = 'testrunner.bat or .sh temp.dd.csv' 
-# endrun = ' <additional arguments>'
-# report = directory set when editing the testrunner/index.xml - we only want the index file
 
 maxtests=1000000 #default 10000000
 fail="newdefects, reopeneddefects" #default new defects and reopened defects  #options newdefects, reopeneddefects, flakybrokentests, newflaky, reopenedflaky, failedtests, brokentests
@@ -29,9 +24,9 @@ fullnameseparator=" " #default ' '
 fullname="false" #default false
 failfast="false" #defult false
 maxrerun=3 #default 3
-rerun="false" #default false
+rerun="true" #default false
 importtype="junit" #default junit
-reporttype="directory" #default directory
+reporttype="directory" #default directory other option file, when directory needs to end with /
 teststorun="all" #options include - high, medium, low, unassigned, ready, open, none
 deletereports="false" #options true or false, BE CAREFUL THIS WILL DELETE THE SPECIFIC FILE OR ALL XML FILES IN THE DIRECTORY
 #startrun needs to end with a space sometimes
@@ -48,7 +43,212 @@ generatefile="false"
 template="none"
 addtestsuitename="false"
 addclassname="false"
-#--addtestsuitename "true" --testsuitesnameseparator "d" --addclassname "true" --classnameseparator "f"
+#--testsuitesnameseparator and classnameseparator need to be encoded i.e. # is %23
+
+
+########
+#Templates
+########
+
+
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -d | --runtemplate )       shift
+                                   runtemplate=$1
+                                   ;;
+        -d | --testtemplate )          shift
+                                   testtemplate=$1
+                                   ;;
+    esac
+    shift
+done
+
+#####Test Run Templates######
+
+if [[ $runtemplate == "prioritized tests with unassigned" ]] ; then
+teststorun="high,medium,unassigned"
+; fi
+
+if [[ $runtemplate == "prioritized tests without unassigned" ]] ; then
+teststorun="high,medium,unassigned"
+; fi
+
+if [[ $runtemplate == "no tests" ]] ; then
+teststorun="none"
+; fi
+
+if [[ $testtemplate == "all tests" ]] ; then
+teststorun="all"
+fail="newdefects, reopeneddefects, failedtests, brokentests"
+; fi
+
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -t | --teststorun )    shift
+                               teststorun=$1
+                               ;;
+    esac
+    shift
+done
+
+#Template Sahi
+#testsuitename#testname
+#addtestsuitename=true
+#testsuitesnameseparator=%23
+#Sahi Setup
+#testrunner.bat demo/demo.suite http://sahitest.com/demo/ firefox
+#startrun testrunner.bat temp.dd.csv 
+#endrun as per setup
+#SET LOGS_INFO=junit:<LOCATION>
+#https://sahipro.com/docs/using-sahi/playback-commandline.html
+
+#Sahi Ant
+#https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
+#startrun ant -f demo.xml
+#<property name="scriptName" value="demo/ddcsv/temp.dd.csv"/>
+#<report type="junit" logdir="<LOCATION>"/>
+
+# To run tests with sahi
+# edit testrunner.bat or .sh - add line "SET LOGS_INFO=junit:<Directory of your choice>"
+# startrun = 'testrunner.bat or .sh temp.dd.csv' 
+# endrun = ' <additional arguments>'
+# report = directory set when editing the testrunner/index.xml - we only want the index file
+
+if [[ $testtemplate == "sahi ant" ]] ; then
+    generatesfile="true"
+    testseparator=","
+    addtestsuitename=true
+    testsuitesnameseparator=%23
+    generatefile="sahi"
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="ant -f "
+    else
+    startrun="ant -f "
+    ; fi
+; fi
+
+#set endrun to being final command for test runner i.e. browser etc
+if [[ $testtemplate == "sahi testrunner" ]] ; then
+    generatesfile="true"
+    testseparator=","
+    addtestsuitename=true
+    testsuitesnameseparator=%23
+    generatefile="sahi"
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="testrunner temp.dd.csv"
+    else
+    startrun="testrunner"
+    ; fi
+; fi
+
+if [[ $testtemplate == "mvn" ]] ; then
+    testseparator=","
+    addtestsuitename=true
+    testsuitesnameseparator=%23
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="mvn -Dtest="
+    endrun="test"
+    else
+    startrun="mvn test"
+    ; fi
+    report="/target/surefire-reports/"
+    reporttype="directory"
+; fi
+
+if [[ $testtemplate == "rspec" ]] ; then
+    testseparator=" -e '"
+    #addtestsuitename=true
+    #testsuitesnameseparator=%23
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="rspec --format RspecJunitFormatter --out rspec.xml -e '"
+    postfixtest="'"
+    else
+    startrun="rspec --format RspecJunitFormatter --out rspec.xml"
+    ; fi
+    reporttype="file"
+    report="rspec.xml"
+; fi
+
+#startrun should be how your tests are executed i.e. java -jar robotframework.jar or robot
+#then -x robot.xml to create the output file
+#then --test ' if you are running specific tests
+#endrun should be the location of your tests
+if [[ $testtemplate == "robotframework" ]] ; then
+    testseparator=" --test '"
+    postfixtest="'"
+    reporttype="file"
+    report="robot.xml"
+; fi
+
+#mocha
+#install https://www.npmjs.com/package/mocha-junit-reporter
+#https://github.com/mochajs/mocha/issues/1565
+if [[ $testtemplate == "mocha" ]] ; then
+    testseparator="|"
+    reporttype="file"
+    report="test-results.xml"
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="mocha test --reporter mocha-junit-reporter -g "
+    postfixtest="$"
+    prefixtest="^"
+    else
+    startrun="mocha test --reporter mocha-junit-reporter "
+    ; fi
+; fi
+
+#pytest
+#https://stackoverflow.com/questions/36456920/is-there-a-way-to-specify-which-pytest-tests-to-run-from-a-file
+if [[ $testtemplate == "pytest" ]] ; then
+    testseparator=" or "
+    reporttype="file"
+    report="test-results.xml"
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="python -m pytest --junitxml=test-results.xml -k '"
+    endrun="'"
+    else
+    startrun="python -m pytest --junitxml=test-results.xml"
+    ; fi
+; fi
+
+#testim
+#https://help.testim.io/docs/the-command-line-cli
+if [[ $testtemplate == "testim" ]] ; then
+    testseparator=" --name '"
+    reporttype="file"
+    report="test-results.xml"
+    if [[ $teststorun != "all" && $teststorun != "none"]] ; then
+    startrun="testim --report-file test-results.xml --name '"
+    postfixtest="'"
+    else
+    startrun="testim --report-file test-results.xml"
+    ; fi
+; fi
+
+#cypress
+#https://github.com/bahmutov/cypress-select-tests
+
+
+
+#Todo
+#mstest
+#nunit
+#xunit
+#gradle/ant?
+#c?
+#c++
+#clojure
+#eunit
+#go
+#haskell
+#javascript
+#objective c
+#perl
+#php
+#scala
+#swift
+#htmlunit
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -115,6 +315,9 @@ while [ "$1" != "" ]; do
         -se | --testseparator )         shift
                                         testseparator=$1
                                         ;;
+        -se | --testseparatorend )      shift
+                                        testseparatorend=$1
+                                        ;;
         -er | --endrun )       shift
                                endrun=$1
                                ;;
@@ -148,12 +351,9 @@ while [ "$1" != "" ]; do
         -d | --repository )         shift
                                     repository=$1
                                     ;;
-        -d | --generatefile )       shift
+        -g | --generatefile )       shift
                                     generatefile=$1
                                     ;;
-        -d | --template )       shift
-                                template=$1
-                                ;;
         -h | --help )          echo "please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript"
                                exit 1
                                ;;
@@ -175,6 +375,8 @@ if [[ $branch == "" ]] ; then branch=`git rev-parse --abbrev-ref HEAD` ; fi
 if [[ $report == *.xml* ]] ; then reporttype="file" ; fi
 if [[ $report == *.Xml* ]] ; then reporttype="file" ; fi
 if [[ $report == *.XML* ]] ; then reporttype="file" ; fi
+if [[ $report != *.* ]] ; then reporttype="directory" ; fi
+echo $reporttype
 
 if [[ $url == "" ]] ; then echo "no url specified" ; exit 1 ; fi
 if [[ $apiKey == "" ]] ; then echo "no apikey specified" ; exit 1 ; fi
@@ -195,34 +397,7 @@ run_id=""
 
 echo $commitId
 
-########
-#Templates
-########
 
-#Template Sahi
-#testsuitename#testname
-#addtestsuitename=true
-#testsuitesnameseparator=%23
-#Sahi Setup
-#testrunner.bat demo/demo.suite http://sahitest.com/demo/ firefox
-#startrun testrunner.bat temp.dd.csv 
-#endrun as per setup
-#SET LOGS_INFO=junit:<LOCATION>
-#https://sahipro.com/docs/using-sahi/playback-commandline.html
-
-#Sahi Ant
-#https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
-#startrun ant -f demo.xml
-#<property name="scriptName" value="demo/ddcsv/temp.dd.csv"/>
-#<report type="junit" logdir="<LOCATION>"/>
-
-
-if [[ $template == "sahi ant" ]] ; then
-generatesfile="true"
-testseparator=","
-addtestsuitename=true
-testsuitesnameseparator=%23
-; fi
 
 #$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commitId $run_id
 echo "Getting tests to run"

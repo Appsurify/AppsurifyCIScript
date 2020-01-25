@@ -14,7 +14,7 @@ if [[ $generatesfile == "false" ]] ; then
     $startrun$1$endrun
 ; fi
 
-if [[ $generatesfile != "false" ]] ; then 
+if [[ $generatesfile == "sahi" ]] ; then 
     "python "$scriptlocation"AppsurifySahi.py "$1
     $startrun$endrun
 ; fi

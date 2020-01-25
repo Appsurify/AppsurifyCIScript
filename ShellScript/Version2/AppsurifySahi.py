@@ -1,11 +1,11 @@
-# Script to run Sahi tests with Appsurify
+# Function to run Sahi tests with Appsurify
 
 # Will generate two files one called temp.dd.csv and anotehr called temp.suite.
 # To run the tests execute testrunner.bat|.sh temp.dd.csv %additionalargs%
 
 # inputs
 # list of tests with format testsuitename#testname,
-# i.e. #teststorun = "ddcsv_dd_csv#test9.sah,ddcsv_dd_csv#test10.sah,sahi_demo_sah#sahi_demo.sah,demo_suite#getwin_popupWithParam.sah"
+# i.e. #sahiteststorun = "ddcsv_dd_csv#test9.sah,ddcsv_dd_csv#test10.sah,sahi_demo_sah#sahi_demo.sah,demo_suite#getwin_popupWithParam.sah"
 
 # Questions/TODO's
 #should we get the first line comment?
@@ -27,10 +27,10 @@ import os
 import sys
 
 
-teststorun = sys.argv[1]
+sahiteststorun = sys.argv[1]
 datarows = []
-tests = teststorun.split(",")
-print(tests)
+sahitests = sahiteststorun.split(",")
+print(sahitests)
 standalonetests = []
 suitetests = []
 datatests = []
@@ -50,7 +50,7 @@ if os.path.exists("temp.dd.csv"):
 if os.path.exists("temp.suite"):
     os.remove("temp.suite")
 
-for test in tests:
+for test in sahitests:
     testsuitename = test[0:(test.find("#"))]
     testsuitename=testsuitename.replace("_",".")
     testname=test[(test.find("#"))+1:]
