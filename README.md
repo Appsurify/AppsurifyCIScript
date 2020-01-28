@@ -16,7 +16,7 @@
 | argument | default | options/details |
 | --- | --- | --- |
 | teststorun | "all" | Defaults to "all" if runtemplate is not set.  Options include - high, medium, low, unassigned, ready, open, none.  Details below |
-| maxtests | default 10000000 | the maximum number of tests to run in each test execution set | 
+| maxtests | 10000000 | the maximum number of tests to run in each test execution set | 
 | runfrequency | "multiple" | #options 'single' or 'multiple' determines if the prioritized tests should be for a single commit or mulltiple i.e. since the last test run |
 
 ### Build Failure Arguments 
@@ -36,6 +36,7 @@
 | testtemplate | None | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework.  See below for usage details |
 | testtemplatearg1 | None | Additional argument for the specified test template |
 | testtemplatearg2 | None | Additional argument for the specified test template |
+| testtemplatearg3 | None | Additional argument for the specified test template |
 | startrunall | None | Required if testtemplate is not set and runtemplate is all tests or teststorun is set to all.  Command to start the test run to execute all tests.  Details below |
 | endrunall | None | Command to end the test run to execute all tests.  Details below |
 | startrunspecific | None | Required if testtemplate is not set and teststorun is not all or none or testtemplate is not all tests or no tests.  Command to start the test run to execute specific tests.  Details below  |
@@ -62,11 +63,10 @@
 | importtype | "junit" | #options 'junit', 'nunit' or 'trx' |
 | reporttype | "directory" | default directory must end with a /, will look for all importtype files in that directory |
 
-### Optional Arguments 
+### Commit Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
-| additionalargs | "" |   |    
 | branch | 'git branch \| grep \\\* \| cut -d ' ' -f2' | The branch from which you would like to select the commits to get priorized tests for.  Will default to the value of 'git branch \| grep \\\* \| cut -d ' ' -f2' if not specified |
 | commit | git log -1 --pretty="%H | commitId that this test run is for, if not supplied the script will use git log -1 --pretty="%H |
 
@@ -104,6 +104,93 @@ If however the tests needed to be in the format of 'run tests -test=test1 -test=
 ```
 
 ### Parameter details - testtemplate
+
+#### Maven
+The following values are set when this testtemplate is selected
+
+#### Testim
+The following values are set when this testtemplate is selected
+testseparator=" --name '"
+reporttype="file"
+report="test-results.xml"
+startrunspecific="testim --report-file test-results.xml --name '"
+postfixtest="'"
+startrunall="testim --report-file test-results.xml"
+
+
+#### Rspec
+The following values are set when this testtemplate is selected
+
+#### Sahi Ant
+#####Required Config
+Ensure junit report is set in the ant file - https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
+testtemplatearg1 - The report location set as per above
+testtemplatearg2 - The ant file to run all tests
+testtemplatearg3 - The ant file to the specific set of tests
+
+The following values are set when this testtemplate is selected
+testseparator=","
+addtestsuitename="true"
+testsuitesnameseparator="%23"
+generatefile="sahi"
+startrunall="ant -f "+testtemplatearg2
+startrunspecific="ant -f "testtemplatearg3
+report = testtemplatearg1
+
+#### Sahi Testrunner
+#####Required Config
+Set the Sahi runner to create a junit report - https://sahipro.com/docs/using-sahi/sahi-reports.html
+The following values must be supplied
+testtemplatearg1 - The report location set as per above
+testtemplatearg2 - The command to run all tests
+
+The following values are set when this testtemplate is selected
+generatefile="true"
+testseparator=","
+addtestsuitename="true"
+testsuitesnameseparator="%23"
+generatefile="sahi"
+startrunspecific="testrunner temp.dd.csv"
+startrunall="testrunner " + testtemplatearg2
+report=testtemplatearg1
+
+#### Robot Framework
+#####Required Config
+testtemplatearg1 - The execution command used to start robotframework tests i.e. java -jar robotframework.jar 
+testtemplatearg2 - The location of your tests
+testtemplatearg3 - Report location
+
+The following values are set when this testtemplate is selected
+testseparator=" --test '"
+postfixtest="'"
+reporttype="file"
+report=testtemplatearg3
+startrunall=testtemplatearg1+" -x "+testtemplatearg3+" "
+endrunall=testtemplatearg2
+startrunspecific=testtemplatearg1+" -x "+testtemplatearg3+" "
+endrunall=testtemplatearg2
+
+#### Mocha
+#####Required Config
+Note the following plugin must be installed to generate the junit report file - https://www.npmjs.com/package/mocha-junit-reporter
+
+The following values are set when this testtemplate is selected
+testseparator="|"
+reporttype="file"
+report="test-results.xml"
+startrunspecific="mocha test --reporter mocha-junit-reporter -g "
+postfixtest="$"
+prefixtest="^"
+startrunall="mocha test --reporter mocha-junit-reporter "
+
+#### Pytest
+The following values are set when this testtemplate is selected
+testseparator=" or "
+reporttype="file"
+report="test-results.xml"
+startrunspecific="python -m pytest --junitxml=test-results.xml -k '"
+endrunspecific="'"
+startrunall="python -m pytest --junitxml=test-results.xml"
 
 ### Parameter details - teststorun  
 
