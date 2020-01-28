@@ -15,10 +15,10 @@
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
-| testtemplate | None | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework.  See below for usage details |
-| testtemplatearg1 | None | Additional argument for the specified test template |
-| testtemplatearg2 | None | Additional argument for the specified test template |
-| testtemplatearg3 | None | Additional argument for the specified test template |
+| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework.  See below for usage details |
+| testtemplatearg1 | Additional argument for the specified test template |
+| testtemplatearg2 | Additional argument for the specified test template |
+| testtemplatearg3 | Additional argument for the specified test template |
 
 ### Test Selection Arguments
 
@@ -112,10 +112,10 @@ If however the tests needed to be in the format of 'run tests -test=test1 -test=
 </testsuites>
 ```
 
-### Parameter details - testtemplate
+## Parameter details - testtemplate
 
-#### Maven
-##### Parameter value - "mvn"
+### Maven
+#### Parameter value - "mvn"
 The following values are set when this testtemplate is selected
 - testseparator=","
 - addtestsuitename="true"
@@ -126,8 +126,8 @@ The following values are set when this testtemplate is selected
 - report="./target/surefire-reports/"
 - reporttype="directory"
 
-#### Testim
-##### Parameter value - "testim"
+### Testim
+#### Parameter value - "testim"
 The following values are set when this testtemplate is selected
 - testseparator=" --name '"
 - reporttype="file"
@@ -136,9 +136,9 @@ The following values are set when this testtemplate is selected
 - postfixtest="'"
 - startrunall="testim --report-file test-results.xml"
 
-#### Rspec
-##### Parameter value - "rspec"
-##### Required Config
+### Rspec
+#### Parameter value - "rspec"
+#### Required Config
 The following must be installedhttps://github.com/sj26/rspec_junit_formatter
 The following values are set when this testtemplate is selected
 - testseparator=" "
@@ -149,9 +149,9 @@ The following values are set when this testtemplate is selected
 - reporttype="file"
 - report="rspec.xml"
 
-#### Sahi Ant
-#### Parameter value - "sahi ant"
-##### Required Config
+### Sahi Ant
+### Parameter value - "sahi ant"
+#### Required Config
 Ensure junit report is set in the ant file - https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
 - testtemplatearg1 - The report location set as per above
 - testtemplatearg2 - The ant file to run all tests
@@ -166,9 +166,9 @@ The following values are set when this testtemplate is selected
 - startrunspecific="ant -f "testtemplatearg3
 - report = testtemplatearg1
 
-#### Sahi Testrunner
-##### Parameter value - "sahi testrunner"
-##### Required Config
+### Sahi Testrunner
+#### Parameter value - "sahi testrunner"
+#### Required Config
 Set the Sahi runner to create a junit report - https://sahipro.com/docs/using-sahi/sahi-reports.html
 The following values must be supplied
 - testtemplatearg1 - The report location set as per above
@@ -183,9 +183,9 @@ The following values are set when this testtemplate is selected
 - startrunall="testrunner " + testtemplatearg2
 - report=testtemplatearg1
 
-#### Robot Framework
-##### Parameter value - "robotframework"
-##### Required Config
+### Robot Framework
+#### Parameter value - "robotframework"
+#### Required Config
 - testtemplatearg1 - The execution command used to start robotframework tests i.e. java -jar robotframework.jar 
 - testtemplatearg2 - The location of your tests
 - testtemplatearg3 - Report location
@@ -200,9 +200,9 @@ The following values are set when this testtemplate is selected
 - startrunspecific=testtemplatearg1+" -x "+testtemplatearg3+" "
 - endrunall=testtemplatearg2
 
-#### Mocha
-##### Parameter value - "mocha"
-##### Required Config
+### Mocha
+#### Parameter value - "mocha"
+#### Required Config
 Note the following plugin must be installed to generate the junit report file - https://www.npmjs.com/package/mocha-junit-reporter
 
 The following values are set when this testtemplate is selected
@@ -214,8 +214,8 @@ The following values are set when this testtemplate is selected
 - prefixtest="^"
 - startrunall="mocha test --reporter mocha-junit-reporter "
 
-#### Pytest
-##### Parameter value - "pytest"
+### Pytest
+#### Parameter value - "pytest"
 The following values are set when this testtemplate is selected
 - testseparator=" or "
 - reporttype="file"
@@ -224,13 +224,13 @@ The following values are set when this testtemplate is selected
 - endrunspecific="'"
 - startrunall="python -m pytest --junitxml=test-results.xml"
 
-### Parameter details - teststorun  
+## Parameter details - teststorun  
 
 We recommend using the runtemplate parameter instead of using teststorun.  But for additional control on which tests to run you may change the teststorun field.  When doing so we recommend initially running all your tests and just pushing the results to Appsurify. To do this choose either "all" and use this script to run the tests, or choose none and use this script to just upload the results. Once you have either selected the coverage of the tests or uploaded a number of test reults for Appsurify to learn from select Appsurify recommended and choose from the options where - high = most likely to fail, covers the exact change, medium = less likely to fail, covers the functional area or dependencies, low = very unlikely to fail, does not cover the change, unassigned = tests where Appsurify is unsure whether the coverage of these tests, ready defects = tests which have a defect associated with them which is ready for testing, open defects = tests which have a defect associated with them which is open.
 
-### Examples
+## Examples
 
-#### Maven 
+### Maven 
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
 
