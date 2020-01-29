@@ -132,6 +132,21 @@ The following values are set when this testtemplate is selected
 - endrunspecific="'"
 - startrunall="python -m pytest --junitxml=test-results.xml"
 
+
+### Cyprus
+### Parameter value - "cyprus"
+#### Required Config
+The following cyprus addon must be installed in order to specify the tests - https://github.com/bahmutov/cypress-select-tests
+
+The following values are set when this testtemplate is selected
+testseparator="|"
+reporttype="file"
+report="results.xml"
+startrunspecific="cypress run --reporter junit --reporter-options mochaFile=result.xml grep="
+postfixtest="'"
+prefixtest="'"
+startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
+
 ## Example Usage
 
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
