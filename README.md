@@ -151,6 +151,17 @@ startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xm
 
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
+### Test Template Customization
+
+In order to customize the way tests are run you can use the following parameters
+
+| argument | options |
+| --- | --- |
+| startrunpostfix | appended to the startrun command |
+| endrunprefix | prepended to the endrun command |
+| endrunpostfix | appended to the endrun command |
+
+Editing these will change the way tests are executed to the following: startrun + startrunpostfix + testlist + endrunprefix + endrun + endrunpostfix
 
 ## Additional Arguments - For Customization
 
@@ -219,9 +230,9 @@ python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "ap
 
 Note the execution arguments will automatically be set when using the testtemplate.
 
-When executing all tests the following command is created: startrunall+endrunall.  To execute all tests via maven the command 'mvn test' needs to be run.  To do this startrunall could be set to 'mvn test' or startrunall could be set to 'mvn ' and endrunall set to 'test'.  Please note spaces are required otherwise the command will not be properly formatted.
+When executing all tests the following command is created: startrunall+startrunpostfix+endrunprefix+endrunall+endrunpostfix.  To execute all tests via maven the command 'mvn test' needs to be run.  To do this startrunall could be set to 'mvn test' or startrunall could be set to 'mvn ' and endrunall set to 'test'.  Please note spaces are required otherwise the command will not be properly formatted.
 
-When executing specific tests the following command is created startrunspecific+specifictestlist+endrunspecific  To execute specific tests via maven the command 'mvn -Dtests=<specifictestlist> test'.  To do this startrunspecific needs to be set to 'mvn -Dtests=' and endrunspecific set to ' test'.  For details on how specifictestlist is created see below.
+When executing specific tests the following command is created startrunspecific+startrunpostfix+specifictestlist+endrunprefix+endrunspecific+endrunpostfix  To execute specific tests via maven the command 'mvn -Dtests=<specifictestlist> test'.  To do this startrunspecific needs to be set to 'mvn -Dtests=' and endrunspecific set to ' test'.  For details on how specifictestlist is created see below.
 
 #### Specific Tests
 
