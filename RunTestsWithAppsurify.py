@@ -632,6 +632,15 @@ if testtemplate == "ranorex webtestit":
 
 #cypress
 #https://github.com/bahmutov/cypress-select-tests
+#cypress run --reporter junit --reporter-options mochaFile=result.xml
+if testtemplate == "cyprus":
+    testseparator="|"
+    reporttype="file"
+    report="results.xml"
+    startrunspecific="cypress run --reporter junit --reporter-options mochaFile=result.xml grep="
+    postfixtest="'"
+    prefixtest="'"
+    startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
 #Todo
 #mstest
