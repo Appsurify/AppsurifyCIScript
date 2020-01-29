@@ -173,18 +173,20 @@ def execute_tests(testlist, testset):
     if deletereports == "true":
         delete_reports()
     command = ""
+
+    endrunpostfix
     if generatefile == "false":
         if testset == 0:
-            command = startrunall + testlist + endrunall
+            command = startrunall + startrunpostfix + testlist + endrunprefix + endrunall + endrunpostfix
         else:
-            command = startrunspecific + testlist + endrunspecific
+            command = startrunspecific + startrunpostfix + testlist + endrunprefix + endrunspecific + endrunpostfix
 
     if generatefile == "sahi":
         generate_sahi(testlist)
         if testset == 0:
-            command = startrunall + endrunall
+            command = startrunall + startrunpostfix + endrunprefix + endrunall + endrunpostfix
         else:
-            command = startrunspecific + endrunspecific
+            command = startrunspecific + startrunpostfix + endrunprefix + endrunspecific + endrunpostfix
 
     echo("run command = " + command)
     runcommand(command)
@@ -452,6 +454,9 @@ testseparatorend=""
 testtemplatearg1=""
 testtemplatearg2=""
 testtemplatearg3=""
+startrunpostfix=""
+endrunprefix=""
+endrunpostfix""
 #--testsuitesnameseparator and classnameseparator need to be encoded i.e. # is %23
 
 
@@ -750,6 +755,12 @@ if len(sys.argv) > 1 :
             repository = sys.argv[k+1]
         if sys.argv[k] == "--generatefile":
             generatefile = sys.argv[k+1]
+        if sys.argv[k] == "--startrunpostfix":
+            startrunpostfix = sys.argv[k+1]
+        if sys.argv[k] == "--endrunprefix":
+            endrunprefix = sys.argv[k+1]
+        if sys.argv[k] == "--endrunpostfix":
+            endrunpostfix = sys.argv[k+1]
         if sys.argv[k] == "--help":
             echo("please see url for more details on this script and how to execute your tests with appsurify - https://github.com/Appsurify/AppsurifyCIScript")
 
