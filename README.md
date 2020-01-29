@@ -231,16 +231,16 @@ We recommend using the runtemplate parameter instead of using teststorun.  But f
 ## Examples
 
 ### Maven 
-python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
+python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
 
 ### Depricated examples
 
 #### Java All Tests
-RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "mvn test" 
+RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "mvn test" 
 
 #### Java High Tests
-RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "report" --teststorun "high,medium" --startrun "mvn -Dtest=" --fullname "true" --fullnameseparator "#" --endrun " test" --testseparator ","
+RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report" --teststorun "high,medium" --startrun "mvn -Dtest=" --fullname "true" --fullnameseparator "#" --endrun " test" --testseparator ","
 
 
 #### Rspec all tests
@@ -249,5 +249,5 @@ Startrun="rspec --format RspecJunitFormatter --out rspec.xml"
 
 
 #### Rspec specific tests
-RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "Kasdfasdfasdfasdfasdfasdfadsfasdfasdfasdf" --project "Test" --testsuite "Test" --report "rspec.xml" --teststorun "high,medium" --startrun "rspec --format RspecJunitFormatter --out rspec.xml -e '" --endrun = "'" --testseparator "' -e '"
+RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "rspec.xml" --teststorun "high,medium" --startrun "rspec --format RspecJunitFormatter --out rspec.xml -e '" --endrun = "'" --testseparator "' -e '"
 https://relishapp.com/rspec/rspec-core/docs/command-line/example-option
