@@ -15,7 +15,7 @@
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
-| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework.  See below for usage details |
+| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest.  See below for usage details |
 | testtemplatearg1 | Additional argument for the specified test template |
 | testtemplatearg2 | Additional argument for the specified test template |
 | testtemplatearg3 | Additional argument for the specified test template |
@@ -139,24 +139,25 @@ The following values are set when this testtemplate is selected
 The following cyprus addon must be installed in order to specify the tests - https://github.com/bahmutov/cypress-select-tests
 
 The following values are set when this testtemplate is selected
-testseparator="|"
-reporttype="file"
-report="results.xml"
-startrunspecific="cypress run --reporter junit --reporter-options mochaFile=result.xml grep="
-postfixtest="'"
-prefixtest="'"
-startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
+- testseparator="|"
+- reporttype="file"
+- report="results.xml"
+- startrunspecific="cypress run --reporter junit --reporter-options mochaFile=result.xml grep="
+- postfixtest="'"
+- prefixtest="'"
+- startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
 ### Mstest
 ### Parameter value - "mstest"
-testseparator=","
-reporttype="file"
-startrunspecific="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
-postfixtest="'"
-prefixtest="'"
-startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
-report=testtemplatearg1
-importtype="trx"
+The following values are set when this testtemplate is selected
+- testseparator=","
+- reporttype="file"
+- startrunspecific="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
+- postfixtest="'"
+- prefixtest="'"
+- startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
+- report=testtemplatearg1
+- importtype="trx"
 
 ## Example Usage
 
