@@ -647,6 +647,20 @@ if testtemplate == "cyprus":
     prefixtest="'"
     startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
+#mstest
+#/Tests:TestMethod1,testMethod2
+#mstest.exe"  /testcontainer:"%WORKSPACE%\MYPROJECT\bin\debug\MYTEST.dll" /test:"ABC" /resultsfile:"%WORKSPACE%\result_%BUILD_NUMBER%.xml"
+if testtemplate == "mstest":
+    testseparator=","
+    reporttype="file"
+    startrunspecific="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
+    postfixtest="'"
+    prefixtest="'"
+    startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
+    report=testtemplatearg1
+    importtype="trx"
+
+
 #Todo
 #mstest
 #nunit

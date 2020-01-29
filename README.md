@@ -147,6 +147,17 @@ postfixtest="'"
 prefixtest="'"
 startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
+### Mstest
+### Parameter value - "mstest"
+testseparator=","
+reporttype="file"
+startrunspecific="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
+postfixtest="'"
+prefixtest="'"
+startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
+report=testtemplatearg1
+importtype="trx"
+
 ## Example Usage
 
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
