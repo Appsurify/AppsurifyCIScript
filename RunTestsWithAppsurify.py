@@ -200,7 +200,7 @@ def get_tests(testpriority):
     #echo("runfrequency = " + runfrequency)
     #echo("apikey = " + apikey)
     #echo("importtype = " + importtype)
-    #echo("commitId = "+ commitId)
+    #echo("commit = "+ commit)
     #echo("projectencoded = "+ projectencoded)
     #echo("testsuiteencoded = "+ testsuiteencoded)
     #echo("testpriority = "+ str(testpriority))
@@ -212,7 +212,7 @@ def get_tests(testpriority):
     #echo("url = "+ url)
     #echo("branch = "+ branch)
 
-    #apiendpoint=f"{url}/api/external/prioritized-tests/?project_name={projectencoded}&priority={testpriority}&testsuitename_separator={testsuitesnameseparator}&testsuitename={addtestsuitename}&classname={addclassname}&classname_separator={classnameseparator}&test_suite_name={testsuiteencoded}&first_commit={commitId}"
+    #apiendpoint=f"{url}/api/external/prioritized-tests/?project_name={projectencoded}&priority={testpriority}&testsuitename_separator={testsuitesnameseparator}&testsuitename={addtestsuitename}&classname={addclassname}&classname_separator={classnameseparator}&test_suite_name={testsuiteencoded}&first_commit={commit}"
     #headers={'token': apikey}
     headers = {
         'token': apikey,
@@ -220,7 +220,7 @@ def get_tests(testpriority):
 
     params = {
         'name_type': importtype,
-        'commit': commitId,
+        'commit': commit,
         'project_name': projectencoded,
         'test_suite_name': testsuiteencoded,
         'priority': testpriority,
@@ -378,7 +378,7 @@ def call_import(filepath):
     apiurl = url+"/api/external/import/"
 
     payload = {'type': importtype,
-            'commit': commitId,
+            'commit': commit,
             'project_name': projectencoded,
             'test_suite_name': testsuiteencoded,
             'repo': repository}
@@ -432,7 +432,7 @@ startrunall = "" #startrun needs to end with a space sometimes
 endrunall = ""#endrun needs to start with a space sometimes
 startrunspecific = "" #startrun needs to end with a space sometimes
 endrunspecific = ""#endrun needs to start with a space sometimes
-commitId=""
+commit=""
 scriptlocation="./"
 branch=""
 #runfrequency="single" #options single for single commits, lastrun for all commits since the last run, betweeninclusive or betweenexclusive for all commits between two commits either inclusive or exclusive
@@ -449,6 +449,9 @@ testsuitesnameseparator=""
 testtemplate=""
 classnameseparator=""
 testseparatorend=""
+testtemplatearg1=""
+testtemplatearg2=""
+testtemplatearg3=""
 #--testsuitesnameseparator and classnameseparator need to be encoded i.e. # is %23
 
 
@@ -463,6 +466,12 @@ if len(sys.argv) > 1 :
             runtemplate = sys.argv[k+1]
         if sys.argv[k] == "--testtemplate":
             testtemplate = sys.argv[k+1]
+        if sys.argv[k] == "--testtemplatearg1":
+            testtemplatearg1 = sys.argv[k+1]
+        if sys.argv[k] == "--testtemplatearg2":
+            testtemplatearg2 = sys.argv[k+1]
+        if sys.argv[k] == "--testtemplatearg3":
+            testtemplatearg3 = sys.argv[k+1]
 
 #####Test Run Templates######
 
@@ -474,6 +483,7 @@ if runtemplate == "prioritized tests without unassigned":
 
 if runtemplate == "no tests":
     teststorun="none"
+    fail="newdefects, reopeneddefects, failedtests, brokentests"
 
 if testtemplate == "all tests":
     teststorun="all"
@@ -512,18 +522,20 @@ if testtemplate == "sahi ant":
     addtestsuitename="true"
     testsuitesnameseparator="%23"
     generatefile="sahi"
-    startrunall="ant -f "
-    startrunspecific="ant -f "
+    startrunall="ant -f "+testtemplatearg2
+    startrunspecific="ant -f "testtemplatearg3
+    report = testtemplatearg1
+
 
 #set endrun to being final command for test runner i.e. browser etc
 if testtemplate == "sahi testrunner":
-    generatefile="true"
     testseparator=","
     addtestsuitename="true"
     testsuitesnameseparator="%23"
     generatefile="sahi"
     startrunspecific="testrunner temp.dd.csv"
-    startrunall="testrunner"
+    startrunall="testrunner " + testtemplatearg2
+    report=testtemplatearg1
 
 if testtemplate == "mvn":
     testseparator=","
@@ -536,8 +548,9 @@ if testtemplate == "mvn":
     reporttype="directory"
 
 if testtemplate == "rspec":
-    testseparator=" -e '"
-    startrunspecific="rspec --format RspecJunitFormatter --out rspec.xml -e '"
+    testseparator=" "
+    startrunspecific="rspec --format RspecJunitFormatter --out rspec.xml "
+    prefixtest = "-e '"
     postfixtest="'"
     startrunall="rspec --format RspecJunitFormatter --out rspec.xml"
     reporttype="file"
@@ -548,10 +561,17 @@ if testtemplate == "rspec":
 #then --test ' if you are running specific tests
 #endrun should be the location of your tests
 if testtemplate == "robotframework":
-    testseparator=" --test '"
+    prefixtest=" --test '"
     postfixtest="'"
+    testseparator=" "
     reporttype="file"
-    report="robot.xml"
+    startrunall = testtemplatearg1+
+    report=testtemplatearg3
+    startrunall=testtemplatearg1 + " -x " + testtemplatearg3 + " "
+    endrunall=testtemplatearg2
+    startrunspecific=testtemplatearg1 +" -x " + testtemplatearg3 + " "
+    endrunall=testtemplatearg2
+
 
 #mocha
 #install https://www.npmjs.com/package/mocha-junit-reporter
@@ -585,6 +605,31 @@ if testtemplate == "testim":
     postfixtest="'"
     startrunall="testim --report-file test-results.xml"
 
+
+#testcomplete
+#TestComplete.exe "C:\My Projects\MySuite.pjs" /run /p:MyProj /ExportSummary:"C:\TestLogs\report.xml"
+#/test""ProjectTestItem1"
+#https://support.smartbear.com/testcomplete/docs/working-with/automating/command-line-and-exit-codes/command-line.html
+if testtemplate == "testcomplete":
+    testseparator="|"
+    reporttype="file"
+    report=runtemplatearg2
+    startrunspecific="TestComplete.exe "+runtemplatearg1 + " "
+    endrunspecific = runtemplatearg2
+    startrunall="TestComplete.exe "+runtemplatearg1 + " "
+    endrunall=+ " /ExportSummary:"+runtemplatearg2
+
+#ranorex webtestit
+#https://discourse.webtestit.com/t/running-ranorex-webtestit-in-cli-mode/152
+if testtemplate == "ranorex webtestit":
+    testseparator="|"
+    reporttype="file"
+    report=runtemplatearg2
+    startrunspecific="TestComplete.exe "+runtemplatearg1 + " "
+    endrunspecific = runtemplatearg2
+    startrunall="TestComplete.exe "+runtemplatearg1 + " "
+    endrunall=+ " /ExportSummary:"+runtemplatearg2
+
 #cypress
 #https://github.com/bahmutov/cypress-select-tests
 
@@ -606,6 +651,23 @@ if testtemplate == "testim":
 #scala
 #swift
 #htmlunit
+#ranorex
+#qmetry
+#leapwork
+#experitest
+#katalon
+#testsigma - currently not possible
+#lambdatest
+#smartbear crossbrowsertesting
+#uft
+#telerik test studio
+#perfecto
+#tosca test suite
+#mabl
+#test craft
+#squish
+#test cafe
+
 
 if len(sys.argv) > 1 :
     for k in range(1,c):
@@ -663,8 +725,8 @@ if len(sys.argv) > 1 :
             additionalargs = sys.argv[k+1]
         if sys.argv[k] == "--fail":
             fail = sys.argv[k+1]
-        if sys.argv[k] == "--commitId":
-            commitId = sys.argv[k+1]
+        if sys.argv[k] == "--commit":
+            commit = sys.argv[k+1]
         if sys.argv[k] == "--branch":
             branch = sys.argv[k+1]
         if sys.argv[k] == "--maxtests":
@@ -699,10 +761,10 @@ if len(sys.argv) > 1 :
 testsuiteencoded=urlencode(testsuite)
 projectencoded=urlencode(project)
 
-if commitId == "":
-    commitId=runcommand("git log -1 --pretty=\"%H\"")
-    commitId = commitId.rstrip()
-    print("commit id = " + commitId)
+if commit == "":
+    commit=runcommand("git log -1 --pretty=\"%H\"")
+    commit = commit.rstrip()
+    print("commit id = " + commit)
 
 #git branch | grep \* | cut -d ' ' -f2
 #git rev-parse --abbrev-ref HEAD
@@ -748,12 +810,12 @@ if startrunspecific == "" and teststorun == "all" and rerun == "true":
 
 ####example RunTestsWithAppsurify.sh --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "mvn -tests" 
 #example RunTestsWithAppsurify.sh --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "C:\apache\apache-maven-3.5.0\bin\mvn tests " 
-#./RunTestsWithAppsurify.sh --url "https://demo.appsurify.com" --apikey "MTU6a3Q1LUlTU3ZEcktFSTFhQUNoYy1DU3pidkdz" --project "Spirent Demo" --testsuite "Unit" --report "c:\testresults\GroupedTests1.xml" --teststorun "all" --commitId "44e9b51296e41e044e45b81e0ef65e9dc4c3bc23"
+#./RunTestsWithAppsurify.sh --url "https://demo.appsurify.com" --apikey "MTU6a3Q1LUlTU3ZEcktFSTFhQUNoYy1DU3pidkdz" --project "Spirent Demo" --testsuite "Unit" --report "c:\testresults\GroupedTests1.xml" --teststorun "all" --commit "44e9b51296e41e044e45b81e0ef65e9dc4c3bc23"
 #python RunTestsWithAppsurify.py --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test"
 
 run_id=""
 
-#$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commitId $run_id
+#$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commit $run_id
 echo("Getting tests to run")
 
 valuetests=""
