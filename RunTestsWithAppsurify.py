@@ -8,6 +8,8 @@ import shutil
 import json
 import requests
 import csv
+from shutil import copyfile
+from xml.etree.ElementTree import ElementTree
 
 tests=""
 
@@ -17,6 +19,45 @@ def find(name):
         if name in files:
             return os.path.join(os.path.relpath(root, currentdir), name) # for relative path
             #return os.path.join(root, name) # for full path - could also change the main search to search all folders
+
+
+# Script to run Katalon tests with Appsurify
+
+# inputs
+# link to test suite with all tests
+# will create copy of testsuite with all tests called temp.ts
+# list of tests with format testname,
+# i.e. #teststorun = "Test Cases/New Test Case 2, Test Cases/New Test Case"
+def generate_katalon(teststocreate):
+    
+    #Copy xml file with all tests
+    # Source path 
+    source = os.path.join(testtemplatearg2, testtemplatearg3)
+
+    full_path = os.path.realpath(source)
+    
+    # Destination path 
+    destination = os.path.join(os.path.dirname(full_path),"temp.ts")
+
+    print(destination)
+    copyfile(source, destination)
+
+    #remove tests not in test list
+    teststorun = teststocreate
+    testlist = teststorun.split(',')
+
+    tree = ElementTree()
+    tree.parse(destination)
+        
+    root = tree.getroot()
+    for test in root.findall('testCaseLink'):
+        testids = test.findall('testCaseId')
+        for testid in testids:
+            print(testid.text)
+            if testid.text not in testlist:
+                root.remove(test)
+
+    tree.write(destination)
 
 # Function to run Sahi tests with Appsurify
 
@@ -183,6 +224,13 @@ def execute_tests(testlist, testset):
 
     if generatefile == "sahi":
         generate_sahi(testlist)
+        if testset == 0:
+            command = startrunall + startrunpostfix + endrunprefix + endrunall + endrunpostfix
+        else:
+            command = startrunspecific + startrunpostfix + endrunprefix + endrunspecific + endrunpostfix
+
+    if generatefile == "katalon":
+        generate_katalon(testlist, )
         if testset == 0:
             command = startrunall + startrunpostfix + endrunprefix + endrunall + endrunpostfix
         else:
@@ -454,9 +502,10 @@ testseparatorend=""
 testtemplatearg1=""
 testtemplatearg2=""
 testtemplatearg3=""
+testtemplatearg4=""
 startrunpostfix=""
 endrunprefix=""
-endrunpostfix""
+endrunpostfix=""
 #--testsuitesnameseparator and classnameseparator need to be encoded i.e. # is %23
 
 
@@ -477,6 +526,8 @@ if len(sys.argv) > 1 :
             testtemplatearg2 = sys.argv[k+1]
         if sys.argv[k] == "--testtemplatearg3":
             testtemplatearg3 = sys.argv[k+1]
+        if sys.argv[k] == "--testtemplatearg4":
+            testtemplatearg4 = sys.argv[k+1]
 
 #####Test Run Templates######
 
@@ -528,7 +579,7 @@ if testtemplate == "sahi ant":
     testsuitesnameseparator="%23"
     generatefile="sahi"
     startrunall="ant -f "+testtemplatearg2
-    startrunspecific="ant -f "testtemplatearg3
+    startrunspecific="ant -f "+testtemplatearg3
     report = testtemplatearg1
 
 
@@ -570,7 +621,6 @@ if testtemplate == "robotframework":
     postfixtest="'"
     testseparator=" "
     reporttype="file"
-    startrunall = testtemplatearg1+
     report=testtemplatearg3
     startrunall=testtemplatearg1 + " -x " + testtemplatearg3 + " "
     endrunall=testtemplatearg2
@@ -661,6 +711,42 @@ if testtemplate == "mstest":
     importtype="trx"
 
 
+#tosca
+#https://support.tricentis.com/community/article.do?number=KB0013693
+#https://documentation.tricentis.com/en/1000/content/continuous_integration/execution.htm
+#https://documentation.tricentis.com/en/1030/content/continuous_integration/configuration.htm
+#testset = https://documentation.tricentis.com/en/1010/content/tchb/tosca_executor.htm
+
+
+#katalon
+#katalonc -noSplash -runMode=console -projectPath="C:\Katalon\Test\Test Project\Test Project.prj" -retry=0 -testSuitePath="Test Suites/New Test Suite"
+# -executionProfile="default" -browserType="Chrome" -apiKey="ee04de44-b3c7-4c9e-b8cd-741157fd4324" -reportFolder="c:\katalon" -reportFileName="report"
+#JUnit_Report.xml gets generated
+# Has apiKey - https://forum.katalon.com/t/how-to-use-katalon-plugin-for-jenkins-on-windows/20326/3
+#-projectPath=<path>	Specify the project location (include .prj file). The absolute path must be used in this case.	Y
+#-testSuitePath=<path>	Specify the test suite file (without extension .ts). The relative path (root being project folder) must be used in this case.
+#-reportFolder=<path>	Specify the destination folder for saving report files. Can use absolute path or relative path (root being project folder).	N
+#-reportFileName=<name>	Specify the name for report files (.html, .csv, .log). If not provide, system uses the name "report" (report.html, report.csv, report.log). This option is only taken into account when being used with "-reportFolder" option.
+if testtemplate == "katalon":
+    testseparator=","
+    reporttype="file"
+    full_path = os.path.realpath(testtemplatearg2)
+    report = testtemplatearg1
+    head_tail = os.path.split(testtemplatearg1) 
+    report_folder = head_tail[0]
+    report_file = head_tail[1]
+    # Destination path 
+    destination = os.path.join(os.path.dirname(full_path),"temp.ts")
+    head_tail = os.path.split(testtemplatearg3) 
+    startrunspecific="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + os.path.join(head_tail[0], "temp.ts") + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
+    startrunall="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + testtemplatearg3 + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
+    generatefile="katalon"
+    
+    
+
+
+
+
 #Todo
 #mstest
 #nunit
@@ -691,7 +777,7 @@ if testtemplate == "mstest":
 #telerik test studio
 #perfecto
 #tosca test suite
-#mabl
+#mabl - currently not possible
 #test craft
 #squish
 #test cafe
