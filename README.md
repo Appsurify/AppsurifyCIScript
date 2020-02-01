@@ -15,7 +15,7 @@
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
-| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest.  See below for usage details |
+| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon.  See below for usage details |
 | testtemplatearg1 | Additional argument for the specified test template |
 | testtemplatearg2 | Additional argument for the specified test template |
 | testtemplatearg3 | Additional argument for the specified test template |
@@ -158,6 +158,26 @@ The following values are set when this testtemplate is selected
 - startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
 - report=testtemplatearg1
 - importtype="trx"
+
+### Katalon
+### Parameter value - "katalon"
+#### Required Config
+- testtemplatearg1 - Report location
+- testtemplatearg2 - Absolute path to project file
+- testtemplatearg3 - Relative path from project to a created test suite with all tests added to it
+- testtemplatearg4 - API Key
+
+The following values are set when this testtemplate is selected
+- testseparator=","
+- reporttype="file"
+- report = testtemplatearg1
+- head_tail = os.path.split(testtemplatearg1) 
+- report_folder = head_tail[0]
+- report_file = head_tail[1]
+- head_tail = os.path.split(testtemplatearg3) 
+- startrunspecific="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + os.path.join(head_tail[0], "temp.ts") + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
+- startrunall="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + testtemplatearg3 + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
+- generatefile="katalon"
 
 ## Example Usage
 

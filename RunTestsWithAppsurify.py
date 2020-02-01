@@ -730,13 +730,10 @@ if testtemplate == "mstest":
 if testtemplate == "katalon":
     testseparator=","
     reporttype="file"
-    full_path = os.path.realpath(testtemplatearg2)
     report = testtemplatearg1
     head_tail = os.path.split(testtemplatearg1) 
     report_folder = head_tail[0]
     report_file = head_tail[1]
-    # Destination path 
-    destination = os.path.join(os.path.dirname(full_path),"temp.ts")
     head_tail = os.path.split(testtemplatearg3) 
     startrunspecific="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + os.path.join(head_tail[0], "temp.ts") + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
     startrunall="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + testtemplatearg3 + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
