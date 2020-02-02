@@ -58,7 +58,7 @@ The following values are set when this testtemplate is selected
 - report="rspec.xml"
 
 ### Sahi Ant
-### Parameter value - "sahi ant"
+#### Parameter value - "sahi ant"
 #### Required Config
 Ensure junit report is set in the ant file - https://sahipro.com/docs/using-sahi/playback-desktop.html#Playback%20via%20ANT
 - testtemplatearg1 - The report location set as per above
@@ -134,7 +134,7 @@ The following values are set when this testtemplate is selected
 
 
 ### Cyprus
-### Parameter value - "cyprus"
+#### Parameter value - "cyprus"
 #### Required Config
 The following cyprus addon must be installed in order to specify the tests - https://github.com/bahmutov/cypress-select-tests
 
@@ -148,7 +148,7 @@ The following values are set when this testtemplate is selected
 - startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
 ### Mstest
-### Parameter value - "mstest"
+#### Parameter value - "mstest"
 The following values are set when this testtemplate is selected
 - testseparator=","
 - reporttype="file"
@@ -160,7 +160,7 @@ The following values are set when this testtemplate is selected
 - importtype="trx"
 
 ### Katalon
-### Parameter value - "katalon"
+#### Parameter value - "katalon"
 #### Required Config
 - testtemplatearg1 - Report location
 - testtemplatearg2 - Absolute path to project file
@@ -180,7 +180,7 @@ The following values are set when this testtemplate is selected
 - generatefile="katalon"
 
 ### Opentest
-### Parameter value - "opentest"
+#### Parameter value - "opentest"
 #### Required Config
 - testtemplatearg1 - Report location
 - testtemplatearg2 - Template of template with no tests - this template will be copied as temp.yaml and tests to be executed will be appended to this template
