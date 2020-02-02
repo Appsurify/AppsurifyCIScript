@@ -15,7 +15,7 @@
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
-| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon.  See below for usage details |
+| testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon, opentest.  See below for usage details |
 | testtemplatearg1 | Additional argument for the specified test template |
 | testtemplatearg2 | Additional argument for the specified test template |
 | testtemplatearg3 | Additional argument for the specified test template |
@@ -178,6 +178,23 @@ The following values are set when this testtemplate is selected
 - startrunspecific="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + os.path.join(head_tail[0], "temp.ts") + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
 - startrunall="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + testtemplatearg3 + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
 - generatefile="katalon"
+
+### Opentest
+### Parameter value - "opentest"
+#### Required Config
+- testtemplatearg1 - Report location
+- testtemplatearg2 - Template of template with no tests - this template will be copied as temp.yaml and tests to be executed will be appended to this template
+- testtemplatearg3 - Template to run with all tests
+
+The following values are set when this testtemplate is selected
+- testseparator=",,"
+- reporttype="file"
+- report = testtemplatearg1
+- full_path = os.path.realpath(source)
+- destination = os.path.join(os.path.dirname(full_path),"temp.yaml")
+- startrunspecific="opentest session create --out '"+testtemplatearg1+ "' --template '" + destination + "' "
+- startrunall="opentest session create --out '"+testtemplatearg1+ "' --template '" + testtemplatearg3 + "' "
+- generatefile="opentest"
 
 ## Example Usage
 

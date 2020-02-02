@@ -1,4 +1,6 @@
+#!/usr/bin/env python3
 #requires python>3.6
+#Requires - pip install pyyaml
 
 from urllib.parse import quote
 import os
@@ -10,6 +12,7 @@ import requests
 import csv
 from shutil import copyfile
 from xml.etree.ElementTree import ElementTree
+import yaml
 
 tests=""
 
@@ -20,6 +23,58 @@ def find(name):
             return os.path.join(os.path.relpath(root, currentdir), name) # for relative path
             #return os.path.join(root, name) # for full path - could also change the main search to search all folders
 
+
+
+# inputs
+# link to template used as the template
+# will create copy of testsuite with all tests called temp.yaml
+# list of tests with format testname,
+# i.e. #teststorun = "path/testname,, path/testname"
+def generate_opentest(teststocreate):
+    #Copy xml file with all tests
+    # Source path 
+    source = testtemplatearg2
+
+    full_path = os.path.realpath(source)
+    
+    # Destination path 
+    destination = os.path.join(os.path.dirname(full_path),"temp.yaml")
+
+    copyfile(source, destination)
+
+    #remove tests not in test list
+    teststorun = teststocreate
+    testlist = teststorun.split(',,')
+    data = ""
+
+    with open(source) as f:
+        data = yaml.load(f, Loader=yaml.FullLoader)   
+
+    #data = 
+    tests = []
+    k=0
+    teststring = ""
+    for test in testlist:
+        #if k != 0:
+        #    teststring = teststring + ","
+        head_tail = os.path.split(test) 
+        test_path = head_tail[0]
+        test_name = head_tail[1]
+        if test_path == "":
+            test_path = "."
+        #print("test_path = " + test_path)
+        #print("test_name = " + test_name)
+        testdic = {'name': test_name, 'path': test_path}
+        tests.append(testdic)
+
+    #print(tests)
+    testsdic = {'tests' : tests}
+    #print(testsdic) 
+    data.update(testsdic)
+    #print(data) 
+
+    with open(destination, 'w') as f:   
+        newdata = yaml.dump(data, f)
 
 # Script to run Katalon tests with Appsurify
 
@@ -44,7 +99,7 @@ def generate_katalon(teststocreate):
 
     #remove tests not in test list
     teststorun = teststocreate
-    testlist = teststorun.split(',')
+    testlist = teststorun.split(',,')
 
     tree = ElementTree()
     tree.parse(destination)
@@ -86,7 +141,7 @@ def generate_katalon(teststocreate):
 def generate_sahi(teststocreate):
     sahiteststorun = sys.argv[1]
     datarows = []
-    sahitests = sahiteststorun.split(",")
+    sahitests = sahiteststorun.split(",,")
     print(sahitests)
     standalonetests = []
     suitetests = []
@@ -230,7 +285,14 @@ def execute_tests(testlist, testset):
             command = startrunspecific + startrunpostfix + endrunprefix + endrunspecific + endrunpostfix
 
     if generatefile == "katalon":
-        generate_katalon(testlist, )
+        generate_katalon(testlist)
+        if testset == 0:
+            command = startrunall + startrunpostfix + endrunprefix + endrunall + endrunpostfix
+        else:
+            command = startrunspecific + startrunpostfix + endrunprefix + endrunspecific + endrunpostfix
+    
+    if generatefile == "opentest":
+        generate_opentest(testlist)
         if testset == 0:
             command = startrunall + startrunpostfix + endrunprefix + endrunall + endrunpostfix
         else:
@@ -574,7 +636,7 @@ if len(sys.argv) > 1 :
 # report = directory set when editing the testrunner/index.xml - we only want the index file
 
 if testtemplate == "sahi ant":
-    testseparator=","
+    testseparator=",,"
     addtestsuitename="true"
     testsuitesnameseparator="%23"
     generatefile="sahi"
@@ -585,7 +647,7 @@ if testtemplate == "sahi ant":
 
 #set endrun to being final command for test runner i.e. browser etc
 if testtemplate == "sahi testrunner":
-    testseparator=","
+    testseparator=",,"
     addtestsuitename="true"
     testsuitesnameseparator="%23"
     generatefile="sahi"
@@ -728,7 +790,7 @@ if testtemplate == "mstest":
 #-reportFolder=<path>	Specify the destination folder for saving report files. Can use absolute path or relative path (root being project folder).	N
 #-reportFileName=<name>	Specify the name for report files (.html, .csv, .log). If not provide, system uses the name "report" (report.html, report.csv, report.log). This option is only taken into account when being used with "-reportFolder" option.
 if testtemplate == "katalon":
-    testseparator=","
+    testseparator=",,"
     reporttype="file"
     report = testtemplatearg1
     head_tail = os.path.split(testtemplatearg1) 
@@ -740,8 +802,19 @@ if testtemplate == "katalon":
     generatefile="katalon"
     
     
-
-
+#opentest
+#testtemplatearg1 = report
+#testtemplatearg2 = template of template with no tests
+#testtemplatearg3 = template with all tests
+if testtemplate == "opentest":
+    testseparator=",,"
+    reporttype="file"
+    report = testtemplatearg1
+    full_path = os.path.realpath(source)
+    destination = os.path.join(os.path.dirname(full_path),"temp.yaml")
+    startrunspecific="opentest session create --out '"+testtemplatearg1+ "' --template '" + destination + "' "
+    startrunall="opentest session create --out '"+testtemplatearg1+ "' --template '" + testtemplatearg3 + "' "
+    generatefile="opentest"
 
 
 #Todo
