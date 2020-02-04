@@ -363,7 +363,7 @@ Once you have either selected the coverage of the tests or uploaded a number of 
 ## Examples
 
 ### Maven 
-python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
+python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "prioritized tests with unassigned" --testtemplate "mvn"
 
 
 ### Deprecated examples
