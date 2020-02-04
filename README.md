@@ -38,6 +38,9 @@
 
 ## <a id="testtemplate"></a>Parameter details - testtemplate
 
+<details>
+  <summary>Click to expand for details on test template parameter</summary>
+  
 ### Maven
 #### Parameter value - "mvn"
 The following values are set when this testtemplate is selected
@@ -211,6 +214,8 @@ The following values are set when this testtemplate is selected
 - startrunspecific="opentest session create --out '"+testtemplatearg1+ "' --template '" + destination + "' "
 - startrunall="opentest session create --out '"+testtemplatearg1+ "' --template '" + testtemplatearg3 + "' "
 - generatefile="opentest"
+
+</details>
 
 ## <a id="example_usage"></a>Example Usage
 
