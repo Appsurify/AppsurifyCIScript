@@ -30,7 +30,7 @@
 ### <a id="recommended_arguments"></a>Recommended Arguments
 | argument | options |
 | --- | --- |
-| runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
+| runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten).  See [below](#teststorun) for details |
 | testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon, opentest.  See [below](#testtemplate) for usage details |
 | testtemplatearg1 | Additional argument for the specified test template |
 | testtemplatearg2 | Additional argument for the specified test template |
@@ -41,7 +41,13 @@
 <details>
   <summary>Click to expand for test template parameter details/options</summary>
 
-### Maven
+<details>
+  <summary>
+  
+  ### Maven
+  
+  </summary>
+
 #### Parameter value - "mvn"
 The following values are set when this testtemplate is selected
 - testseparator=","
@@ -52,6 +58,8 @@ The following values are set when this testtemplate is selected
 - startrunall="mvn test"
 - report="./target/surefire-reports/"
 - reporttype="directory"
+
+</details>
 
 ### Testim
 #### Parameter value - "testim"
