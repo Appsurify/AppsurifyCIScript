@@ -241,7 +241,7 @@ python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "ap
 ## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
 <details>
-  <summary>Click to expand for details on additional arguments</summary>
+  <summary>Click to expand for details on additional arguments, these will be necessary if you want to use Appsurify in a way not availble in the templates above</summary>
 
 ### <a id="test_selection_arguments"></a>Test Selection Arguments
 
