@@ -42,12 +42,9 @@
   <summary>Click to expand for test template parameter details/options</summary>
 
 <details>
-  <summary>
-  
-  ### Maven
-  
-  </summary>
+  <summary>Maven</summary>
 
+### Maven
 #### Parameter value - "mvn"
 The following values are set when this testtemplate is selected
 - testseparator=","
