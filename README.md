@@ -1,8 +1,24 @@
 # Appsurify CI Script
 
-## Available Arguments
+## Index
+- [Available Arguments](#available_arguments)
+  - [Required Arguments](#required_arguments)
+  - [Recommended Arguments](#recommended_arguments)
+- [Test Template](#testtemplate)
+- [Example Usage](#example_usage)
+- [Additional Arguments](#additional_arguments)
+  - [Test Selection Arguments](#test_selection_arguments)
+  - [Build Failure Arguments](#build_failure_arguments)
+  - [Test Command Arguments](#test_command_arguments)
+  - [Test Format Arguments](#test_format_arguments)
+  - [Report Arguments](#report_arguments)
+  - [Commit Arguments](#commit_arguments)
+  - [Test Execution Details](#test_execution_arguments)
+- [Tests To Run](#teststorun)
+
+## <a id="available_arguments"></a>Available Arguments
  
-### Required Arguments 
+### <a id="required_arguments"></a>Required Arguments 
 
 | argument | options |
 | --- | --- |
@@ -11,7 +27,7 @@
 | project | Name of the project |
 | testsuite | Name of the testsuite |
 
-### Recommended Arguments
+### <a id="recommended_arguments"></a>Recommended Arguments
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
@@ -196,7 +212,7 @@ The following values are set when this testtemplate is selected
 - startrunall="opentest session create --out '"+testtemplatearg1+ "' --template '" + testtemplatearg3 + "' "
 - generatefile="opentest"
 
-## Example Usage
+## <a id="example_usage"></a>Example Usage
 
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
@@ -212,9 +228,9 @@ In order to customize the way tests are run you can use the following parameters
 
 Editing these will change the way tests are executed to the following: startrun + startrunpostfix + testlist + endrunprefix + endrun + endrunpostfix
 
-## Additional Arguments - For Customization
+## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
-### Test Selection Arguments
+### <a id="test_selection_arguments"></a>Test Selection Arguments
 
 | argument | default | options/details |
 | --- | --- | --- |
@@ -222,7 +238,7 @@ Editing these will change the way tests are executed to the following: startrun 
 | maxtests | 10000000 | the maximum number of tests to run in each test execution set | 
 | runfrequency | "multiple" | #options 'single' or 'multiple' determines if the prioritized tests should be for a single commit or mulltiple i.e. since the last test run |
 
-### Build Failure Arguments 
+### <a id="build_failure_arguments"></a>Build Failure Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
@@ -232,7 +248,7 @@ Editing these will change the way tests are executed to the following: startrun 
 | failfast | "false" | whether after each set of test runs to determine if the build has failed (tests will still be rerun if this has been selected) |
 | runtemplate | None | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten) |
 
-### Test Command Arguments 
+### <a id="test_command_arguments"></a>Test Command Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
@@ -245,7 +261,7 @@ Editing these will change the way tests are executed to the following: startrun 
 | startrunspecific | None | Required if testtemplate is not set and teststorun is not all or none or testtemplate is not all tests or no tests.  Command to start the test run to execute specific tests.  Details below  |
 | endrunspecific | None | Command to end the test run to execute specific tests |
 
-### Test Format Arguments 
+### <a id="test_format_arguments"></a>Test Format Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
@@ -257,7 +273,7 @@ Editing these will change the way tests are executed to the following: startrun 
 | addtestsuitename | "false" | whether to include the testsuitename when creating the command to run a specific set of tests |
 | testsuitenameseparator | " " | string or character to separate testsuitename and classname/testname when creating the command to run a specific set of tests |
 
-### Report Arguments 
+### <a id="report_arguments"></a>Report Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
@@ -266,14 +282,14 @@ Editing these will change the way tests are executed to the following: startrun 
 | importtype | "junit" | #options 'junit', 'nunit' or 'trx' |
 | reporttype | "directory" | default directory must end with a /, will look for all importtype files in that directory |
 
-### Commit Arguments 
+### <a id="commit_arguments"></a>Commit Arguments 
 
 | argument | default | options/details |
 | --- | --- | --- |
 | branch | 'git branch \| grep \\\* \| cut -d ' ' -f2' | The branch from which you would like to select the commits to get priorized tests for.  Will default to the value of 'git branch \| grep \\\* \| cut -d ' ' -f2' if not specified |
 | commit | git log -1 --pretty="%H | commitId that this test run is for, if not supplied the script will use git log -1 --pretty="%H |
 
-### Test Execution Details
+### <a id="test_execution_details"></a>Test Execution Details
 
 #### Execution Command
 
@@ -306,7 +322,7 @@ If however the tests needed to be in the format of 'run tests -test=test1 -test=
 </testsuites>
 ```
 
-## Parameter details - teststorun  
+## <a id="teststorun"></a>Parameter details - teststorun  
 
 We recommend using the runtemplate parameter instead of using teststorun.  But for additional control on which tests to run you may change the teststorun field.  When doing so we recommend initially running all your tests and just pushing the results to Appsurify. To do this choose either "all" and use this script to run the tests, or choose none and use this script to just upload the results. Once you have either selected the coverage of the tests or uploaded a number of test reults for Appsurify to learn from select Appsurify recommended and choose from the options where - high = most likely to fail, covers the exact change, medium = less likely to fail, covers the functional area or dependencies, low = very unlikely to fail, does not cover the change, unassigned = tests where Appsurify is unsure whether the coverage of these tests, ready defects = tests which have a defect associated with them which is ready for testing, open defects = tests which have a defect associated with them which is open.
 
