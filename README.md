@@ -40,7 +40,7 @@
 
 <details>
   <summary>Click to expand for details on test template parameter</summary>
-  
+
 ### Maven
 #### Parameter value - "mvn"
 The following values are set when this testtemplate is selected
@@ -235,6 +235,9 @@ Editing these will change the way tests are executed to the following: startrun 
 
 ## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
+<details>
+  <summary>Click to expand for details on additional arguments</summary>
+
 ### <a id="test_selection_arguments"></a>Test Selection Arguments
 
 | argument | default | options/details |
@@ -294,9 +297,14 @@ Editing these will change the way tests are executed to the following: startrun 
 | branch | 'git branch \| grep \\\* \| cut -d ' ' -f2' | The branch from which you would like to select the commits to get priorized tests for.  Will default to the value of 'git branch \| grep \\\* \| cut -d ' ' -f2' if not specified |
 | commit | git log -1 --pretty="%H | commitId that this test run is for, if not supplied the script will use git log -1 --pretty="%H |
 
-### <a id="test_execution_details"></a>Test Execution Details
+</details>
 
-#### Execution Command
+## <a id="test_execution_details"></a>Test Execution Details
+
+<details>
+  <summary>Click to expand for test execution details</summary>
+
+### Execution Command
 
 Note the execution arguments will automatically be set when using the testtemplate.
 
@@ -304,7 +312,7 @@ When executing all tests the following command is created: startrunall+startrunp
 
 When executing specific tests the following command is created startrunspecific+startrunpostfix+specifictestlist+endrunprefix+endrunspecific+endrunpostfix  To execute specific tests via maven the command 'mvn -Dtests=<specifictestlist> test'.  To do this startrunspecific needs to be set to 'mvn -Dtests=' and endrunspecific set to ' test'.  For details on how specifictestlist is created see below.
 
-#### Specific Tests
+### Specific Tests
 
 To create the list of specific tests the ci script queries Appsurify for a list of tests.  For each test they may have an associated testsuite name and classname as often found in the xml junit report.  See below for an example.  The list of tests returned by the api may include the testsuitename and/or classname dependant on whether addtestsuitename, addclassname, testssuitenameseparator and classnameseparator are set.  If for example addtestsuitename="true", testsuitenameseparator="%23, addclassname="true", classnameseparator=%40 (note values need to be encoded via percent encoding https://en.wikipedia.org/wiki/Percent-encoding) the tests would be formatted as follows: testsuitename#classname@testname.
 
@@ -327,6 +335,8 @@ If however the tests needed to be in the format of 'run tests -test=test1 -test=
 </testsuites>
 ```
 
+</details>
+
 ## <a id="teststorun"></a>Parameter details - teststorun  
 
 We recommend using the runtemplate parameter instead of using teststorun.  But for additional control on which tests to run you may change the teststorun field.  When doing so we recommend initially running all your tests and just pushing the results to Appsurify. To do this choose either "all" and use this script to run the tests, or choose none and use this script to just upload the results. Once you have either selected the coverage of the tests or uploaded a number of test reults for Appsurify to learn from select Appsurify recommended and choose from the options where - high = most likely to fail, covers the exact change, medium = less likely to fail, covers the functional area or dependencies, low = very unlikely to fail, does not cover the change, unassigned = tests where Appsurify is unsure whether the coverage of these tests, ready defects = tests which have a defect associated with them which is ready for testing, open defects = tests which have a defect associated with them which is open.
@@ -337,7 +347,10 @@ We recommend using the runtemplate parameter instead of using teststorun.  But f
 python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
 
-### Depricated examples
+### Deprecated examples
+
+<details>
+  <summary>Click to expand for deprecated examples</summary>
 
 #### Java All Tests
 RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "mvn test" 
@@ -354,3 +367,5 @@ Startrun="rspec --format RspecJunitFormatter --out rspec.xml"
 #### Rspec specific tests
 RunTestsWithAppsurify.sh --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "rspec.xml" --teststorun "high,medium" --startrun "rspec --format RspecJunitFormatter --out rspec.xml -e '" --endrun = "'" --testseparator "' -e '"
 https://relishapp.com/rspec/rspec-core/docs/command-line/example-option
+
+</details>
