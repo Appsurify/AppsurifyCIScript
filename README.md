@@ -32,9 +32,7 @@
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten).  See [below](#teststorun) for details |
 | testtemplate | Options - mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon, opentest.  See [below](#testtemplate) for usage details |
-| testtemplatearg1 | Additional argument for the specified test template |
-| testtemplatearg2 | Additional argument for the specified test template |
-| testtemplatearg3 | Additional argument for the specified test template |
+| testtemplatearg1-4 | Additional argumentsfor the specified test template |
 
 ## <a id="testtemplate"></a>Parameter Details - testtemplate
 
