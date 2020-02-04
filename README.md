@@ -39,7 +39,7 @@
 ## <a id="testtemplate"></a>Parameter details - testtemplate
 
 <details>
-  <summary>Click to expand for details on test template parameter</summary>
+  <summary>Click to expand for test template parameter details/options</summary>
 
 ### Maven
 #### Parameter value - "mvn"
@@ -217,11 +217,10 @@ The following values are set when this testtemplate is selected
 
 </details>
 
-## <a id="example_usage"></a>Example Usage
+<details>
+  <summary>Click to expand for additional test template configuration options</summary>
 
-python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
-
-### Test Template Customization
+  ### Test Template Customization
 
 In order to customize the way tests are run you can use the following parameters
 
@@ -232,6 +231,12 @@ In order to customize the way tests are run you can use the following parameters
 | endrunpostfix | appended to the endrun command |
 
 Editing these will change the way tests are executed to the following: startrun + startrunpostfix + testlist + endrunprefix + endrun + endrunpostfix
+
+</details>
+
+## <a id="example_usage"></a>Example Usage
+
+python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "specific tests with unassigned" --testtemplate "mvn"
 
 ## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
