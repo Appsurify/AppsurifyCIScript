@@ -58,6 +58,9 @@ The following values are set when this testtemplate is selected
 
 </details>
 
+<details>
+  <summary>Testim</summary>
+
 ### Testim
 #### Parameter value - "testim"
 The following values are set when this testtemplate is selected
@@ -67,6 +70,11 @@ The following values are set when this testtemplate is selected
 - startrunspecific="testim --report-file test-results.xml --name '"
 - postfixtest="'"
 - startrunall="testim --report-file test-results.xml"
+
+</details>
+
+<details>
+  <summary>Rspec</summary>
 
 ### Rspec
 #### Parameter value - "rspec"
@@ -80,6 +88,11 @@ The following values are set when this testtemplate is selected
 - startrunall="rspec --format RspecJunitFormatter --out rspec.xml"
 - reporttype="file"
 - report="rspec.xml"
+
+</details>
+
+<details>
+  <summary>Sahi Ant</summary>
 
 ### Sahi Ant
 #### Parameter value - "sahi ant"
@@ -98,6 +111,11 @@ The following values are set when this testtemplate is selected
 - startrunspecific="ant -f "testtemplatearg3
 - report = testtemplatearg1
 
+</details>
+
+<details>
+  <summary>Sahi Testrunner</summary>
+
 ### Sahi Testrunner
 #### Parameter value - "sahi testrunner"
 #### Required Config
@@ -114,6 +132,11 @@ The following values are set when this testtemplate is selected
 - startrunspecific="testrunner temp.dd.csv"
 - startrunall="testrunner " + testtemplatearg2
 - report=testtemplatearg1
+
+</details>
+
+<details>
+  <summary>Robot Framework</summary>
 
 ### Robot Framework
 #### Parameter value - "robotframework"
@@ -132,6 +155,11 @@ The following values are set when this testtemplate is selected
 - startrunspecific=testtemplatearg1+" -x "+testtemplatearg3+" "
 - endrunall=testtemplatearg2
 
+</details>
+
+<details>
+  <summary>Mocha</summary>
+
 ### Mocha
 #### Parameter value - "mocha"
 #### Required Config
@@ -146,6 +174,11 @@ The following values are set when this testtemplate is selected
 - prefixtest="^"
 - startrunall="mocha test --reporter mocha-junit-reporter "
 
+</details>
+
+<details>
+  <summary>Pytest</summary>
+
 ### Pytest
 #### Parameter value - "pytest"
 The following values are set when this testtemplate is selected
@@ -156,6 +189,10 @@ The following values are set when this testtemplate is selected
 - endrunspecific="'"
 - startrunall="python -m pytest --junitxml=test-results.xml"
 
+</details>
+
+<details>
+  <summary>Cyprus</summary>
 
 ### Cyprus
 #### Parameter value - "cyprus"
@@ -171,6 +208,11 @@ The following values are set when this testtemplate is selected
 - prefixtest="'"
 - startrunall="cypress run --reporter junit --reporter-options mochaFile=result.xml"
 
+</details>
+
+<details>
+  <summary>Mstest</summary>
+
 ### Mstest
 #### Parameter value - "mstest"
 The following values are set when this testtemplate is selected
@@ -182,6 +224,11 @@ The following values are set when this testtemplate is selected
 - startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
 - report=testtemplatearg1
 - importtype="trx"
+
+</details>
+
+<details>
+  <summary>Katalon</summary>
 
 ### Katalon
 #### Parameter value - "katalon"
@@ -203,6 +250,11 @@ The following values are set when this testtemplate is selected
 - startrunall="katalonc -noSplash -runMode=console -projectPath='" + testtemplatearg2 + "' -testSuitePath='" + "'" + testtemplatearg3 + "' -apiKey='" + testtemplatearg4 +"' -reportFolder='" + report_folder + " -reportFileName='" + report_file + "'"
 - generatefile="katalon"
 
+</details>
+
+<details>
+  <summary>Opentest</summary>
+
 ### Opentest
 #### Parameter value - "opentest"
 #### Required Config
@@ -219,6 +271,8 @@ The following values are set when this testtemplate is selected
 - startrunspecific="opentest session create --out '"+testtemplatearg1+ "' --template '" + destination + "' "
 - startrunall="opentest session create --out '"+testtemplatearg1+ "' --template '" + testtemplatearg3 + "' "
 - generatefile="opentest"
+
+</details>
 
 </details>
 
