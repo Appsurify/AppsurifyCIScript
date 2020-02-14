@@ -12,7 +12,10 @@ import requests
 import csv
 from shutil import copyfile
 from xml.etree.ElementTree import ElementTree
-import yaml
+try:
+   import yaml
+except ImportError:
+   print 'Error, yaml is required, please run pip install pyyaml'
 
 tests=""
 
