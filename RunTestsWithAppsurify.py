@@ -18,6 +18,7 @@ except ImportError:
    print('Error, yaml is required, please run pip install pyyaml')
 
 tests=""
+testsrun=""
 
 def find(name):
     currentdir = os.getcwd() # using current dir, could change this to work with full computer search
@@ -250,7 +251,11 @@ def echo(stringtoprint):
 
 def runcommand(command):
     echo("platform = " + sys.platform)
-    return subprocess.run(command, stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
+    result = subprocess.run(command,  shell=True, capture_output=True)
+    #subprocess.run(['ls', '-l'])stdout=subprocess.PIPE,
+    print(result.stdout)
+    print(result.stderr)
+    return result.stdout.decode('utf-8')
 
 def delete_reports():
     if reporttype == "directory":
@@ -304,7 +309,6 @@ def execute_tests(testlist, testset):
     echo("run command = " + command)
     runcommand(command)
     echo(os.getcwd())
-
     push_results()
 
 def get_tests(testpriority):
@@ -393,22 +397,32 @@ def get_and_run_tests(type):
     count=0
     
     tests = ""
-    for element in testset:
-        count = count + 1
-        if count == 1:
-            tests = prefixtest+element["name"]+postfixtest
-        else:
-            tests = tests+testseparator+prefixtest+element["name"]+postfixtest
+    try:    
+        for element in testset:
+            count = count + 1
+            if count == 1:
+                tests = prefixtest+element["name"]+postfixtest
+            else:
+                tests = tests+testseparator+prefixtest+element["name"]+postfixtest
+            
+            if count == maxtests:
+                execute_tests(tests, type)
+                count = 0
+                tests = ""
+                failfast_tests()
+    except:
+        print("No tests to run")
         
-        if count == maxtests:
-            execute_tests(tests, type)
-            count = 0
-            tests = ""
-            failfast_tests()
-    
     if tests != "":
         execute_tests(tests, type)
         failfast_tests
+
+    return tests
+    
+    #doesn't work as it will run on high, medium and low then if there are none for any it will run all
+    #if type != 5 and tests == "":
+    #        print("executing all tests")
+    #        execute_tests("", 0)
 
 def failfast_tests(tests):
     if failfast == "true":
@@ -421,8 +435,8 @@ def rerun_tests_execute():
 def rerun_tests():
     if rerun == "true": 
         numruns = 1
-        echo("rerun " + str(numruns))
         while numruns <= maxrerun:
+            echo("rerun " + str(numruns))
             rerun_tests_execute()
             numruns = numruns+1
 
@@ -482,9 +496,9 @@ def push_results():
         filetype = ".xml"
         if importtype == "trx":
             filetype = ".trx"
-        echo(os.listdir(report))
         for file in os.listdir(report):
             if file.endswith(filetype):
+                echo(file)
                 call_import(os.path.abspath(os.path.join(report, file)))
     if reporttype == "file":
         call_import(report)
@@ -503,6 +517,9 @@ def call_import(filepath):
     headers = {
         'token': apikey,
     }
+    print(headers)
+    print(payload)
+    print(apiurl)
     response = requests.post(apiurl, headers=headers, data=payload, files=files)
     print("file import sent")
     if response.status_code >= 500:
@@ -641,7 +658,7 @@ if len(sys.argv) > 1 :
 if testtemplate == "sahi ant":
     testseparator=",,"
     addtestsuitename="true"
-    testsuitesnameseparator="%23"
+    testsuitesnameseparator="#"
     generatefile="sahi"
     startrunall="ant -f "+testtemplatearg2
     startrunspecific="ant -f "+testtemplatearg3
@@ -652,7 +669,7 @@ if testtemplate == "sahi ant":
 if testtemplate == "sahi testrunner":
     testseparator=",,"
     addtestsuitename="true"
-    testsuitesnameseparator="%23"
+    testsuitesnameseparator="#"
     generatefile="sahi"
     startrunspecific="testrunner temp.dd.csv"
     startrunall="testrunner " + testtemplatearg2
@@ -661,12 +678,13 @@ if testtemplate == "sahi testrunner":
 if testtemplate == "mvn":
     testseparator=","
     addtestsuitename="true"
-    testsuitesnameseparator="%23"
+    testsuitesnameseparator="#"
     startrunspecific="mvn -Dtest="
-    endrunspecific="test"
+    endrunspecific=" test"
     startrunall="mvn test"
     report="./target/surefire-reports/"
     reporttype="directory"
+    deletereports="true"
 
 if testtemplate == "rspec":
     testseparator=" "
@@ -733,22 +751,22 @@ if testtemplate == "testim":
 if testtemplate == "testcomplete":
     testseparator="|"
     reporttype="file"
-    report=runtemplatearg2
-    startrunspecific="TestComplete.exe "+runtemplatearg1 + " "
-    endrunspecific = runtemplatearg2
-    startrunall="TestComplete.exe "+runtemplatearg1 + " "
-    endrunall=+ " /ExportSummary:"+runtemplatearg2
+    report=testtemplatearg2
+    startrunspecific="TestComplete.exe "+testtemplatearg1 + " "
+    endrunspecific = testtemplatearg2
+    startrunall="TestComplete.exe "+testtemplatearg1 + " "
+    endrunall=+ " /ExportSummary:"+testtemplatearg2
 
 #ranorex webtestit
 #https://discourse.webtestit.com/t/running-ranorex-webtestit-in-cli-mode/152
 if testtemplate == "ranorex webtestit":
     testseparator="|"
     reporttype="file"
-    report=runtemplatearg2
-    startrunspecific="TestComplete.exe "+runtemplatearg1 + " "
-    endrunspecific = runtemplatearg2
-    startrunall="TestComplete.exe "+runtemplatearg1 + " "
-    endrunall=+ " /ExportSummary:"+runtemplatearg2
+    report=testtemplatearg2
+    startrunspecific="TestComplete.exe "+testtemplatearg1 + " "
+    endrunspecific = testtemplatearg2
+    startrunall="TestComplete.exe "+testtemplatearg1 + " "
+    endrunall=+ " /ExportSummary:"+testtemplatearg2
 
 #cypress
 #https://github.com/bahmutov/cypress-select-tests
@@ -968,10 +986,12 @@ if len(sys.argv) > 1 :
 
 testsuiteencoded=urlencode(testsuite)
 projectencoded=urlencode(project)
+testsuiteencoded=testsuite
+projectencoded=project
 
 if commit == "":
     commit=runcommand("git log -1 --pretty=\"%H\"")
-    commit = commit.rstrip()
+    commit = commit.rstrip().rstrip("\n\r")
     print("commit id = " + commit)
 
 #git branch | grep \* | cut -d ' ' -f2
@@ -979,7 +999,7 @@ if commit == "":
 #https://stackoverflow.com/questions/6245570/how-to-get-the-current-branch-name-in-git
 
 if branch == "":
-    branch=runcommand("git rev-parse --abbrev-ref HEAD")
+    branch=runcommand("git rev-parse --abbrev-ref HEAD").rstrip("\n\r").rstrip()
     print("branch = " + branch)
 
 if url == "":
@@ -1028,11 +1048,13 @@ echo("Getting tests to run")
 
 valuetests=""
 finalTestNames=""
-
+testsrun = ""
 if teststorun == "all":
     execute_tests("", 0)
+    testsrun="all"
 
 if teststorun == "none":
+    testsrun="none"
     push_results()
 
 testtypes=[]
@@ -1048,7 +1070,12 @@ if "unassigned" in teststorun:
 
 ####start loop
 for i in testtypes:
-    get_and_run_tests(i)
+    print("testsrun1 = " + testsrun)
+    testsrun = get_and_run_tests(i) + testsrun
+
+if testsrun == "":
+        print("executing all tests")
+        execute_tests("", 0)
 
 if failfast == "false" and rerun == "true":
     rerun_tests()
