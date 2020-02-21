@@ -311,7 +311,7 @@ Once you have either selected the coverage of the tests or uploaded a number of 
 
 ## <a id="example_usage"></a>Example Usage
 
-python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --report "report --runtemplate "prioritized tests with unassigned" --testtemplate "mvn"
+python RunTestsWithAppsurify.py --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --runtemplate "prioritized tests with unassigned" --testtemplate "mvn"
 
 ## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
