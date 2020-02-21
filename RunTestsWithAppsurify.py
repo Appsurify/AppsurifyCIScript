@@ -15,7 +15,7 @@ from xml.etree.ElementTree import ElementTree
 try:
    import yaml
 except ImportError:
-   print 'Error, yaml is required, please run pip install pyyaml'
+   print('Error, yaml is required, please run pip install pyyaml')
 
 tests=""
 
@@ -775,6 +775,18 @@ if testtemplate == "mstest":
     report=testtemplatearg1
     importtype="trx"
 
+#Jasmine3
+#npm install -g jasmine-xml-reporter for jasmine 2.x then use --junitreport and --output to determine where to output the report.
+#npm install -g jasmine-junit-reporter requires jasmine --reporter=jasmine-junit-reporter creates file junit_report
+if testtemplate == "mocha":
+    testseparator="|"
+    reporttype="file"
+    report="junit_report.xml"
+    startrunspecific="jasmine --reporter=jasmine-junit-reporter --filter='"
+    endrunspecific="'"
+    postfixtest="$"
+    prefixtest="^"
+    startrunall="jasmine test --reporter=jasmine-junit-reporter "
 
 #tosca
 #https://support.tricentis.com/community/article.do?number=KB0013693
@@ -940,6 +952,9 @@ if len(sys.argv) > 1 :
 if url[-1:] == "/":
     url = url[:-1]
     echo("url = "+ url)
+
+if repository == "p4":
+    repository = "perforce"
 
 if report[-4:].find(".") >= 0:
     reporttype="file"
