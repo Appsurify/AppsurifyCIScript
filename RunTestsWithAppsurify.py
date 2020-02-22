@@ -253,8 +253,8 @@ def runcommand(command):
     echo("platform = " + sys.platform)
     result = subprocess.run(command,  shell=True, capture_output=True)
     #subprocess.run(['ls', '-l'])stdout=subprocess.PIPE,
-    print(result.stdout)
-    print(result.stderr)
+    print(result.stdout.decode('utf-8'))
+    print(result.stderr.decode('utf-8'))
     return result.stdout.decode('utf-8')
 
 def delete_reports():
