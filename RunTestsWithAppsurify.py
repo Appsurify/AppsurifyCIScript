@@ -686,6 +686,18 @@ if testtemplate == "mvn":
     reporttype="directory"
     deletereports="true"
 
+#mvn test -Dcucumber.options="--name 'another scenario' --name '^a few cukes$'"
+if testtemplate == "cucmber mvn":
+    testseparator=" "
+    startrunspecific="mvn test -Dcucumber.options=\""
+    endrunspecific="\" "
+    postfixtest="$'"
+    prefixtest="--name '^"
+    startrunall="mvn test"
+    report="./target/surefire-reports/"
+    reporttype="directory"
+    deletereports="true"
+
 if testtemplate == "rspec":
     testseparator=" "
     startrunspecific="rspec --format RspecJunitFormatter --out rspec.xml "
