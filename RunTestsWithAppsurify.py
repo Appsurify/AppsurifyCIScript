@@ -1089,6 +1089,6 @@ if testsrun == "":
         print("executing all tests")
         execute_tests("", 0)
 
-if failfast == "false" and rerun == "true":
+if failfast == "false" and rerun == "true" and teststorun != "none":
     rerun_tests()
 
