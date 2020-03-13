@@ -1036,8 +1036,9 @@ if runfrequency == "betweenexclusive" and fromcommit == "":
     exit(1)
 
 if startrunspecific == "" and teststorun != "all":
-    echo("startrunspecific needs to be set in order to execute tests")
-    exit(1)
+    if teststorun != "none":
+        echo("startrunspecific needs to be set in order to execute tests")
+        exit(1)
 if startrunall == "" and teststorun == "all":
     echo("startrunall needs to be set in order to execute tests")
     exit(1)
