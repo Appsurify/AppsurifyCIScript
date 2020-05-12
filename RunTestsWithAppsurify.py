@@ -1093,3 +1093,4 @@ if testsrun == "":
 if failfast == "false" and rerun == "true" and teststorun != "none":
     rerun_tests()
 
+getresults()
