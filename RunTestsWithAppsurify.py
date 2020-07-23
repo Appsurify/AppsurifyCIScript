@@ -19,6 +19,7 @@ except ImportError:
 
 tests=""
 testsrun=""
+run_id=""
 
 def find(name):
     currentdir = os.getcwd() # using current dir, could change this to work with full computer search
@@ -449,7 +450,8 @@ def getresults():
     params = (
         ('test_run', run_id),
     )
-
+    print(params)
+    print(headers)
     response = requests.get(url+'/api/external/output/', headers=headers, params=params)
     print("result request sent")
     resultset = ""
@@ -536,7 +538,9 @@ def call_import(filepath):
         resultset = json.loads(response.content.decode('utf-8'))
         echo(resultset)
         echo("report url = " + resultset["report_url"])
-        run_id = resultset["test_run_id"]
+        echo("run url = " + str(resultset["test_run_id"]))
+        global run_id
+        run_id = str(resultset["test_run_id"])
     else:
         print('[?] Unexpected Error: [HTTP {0}]: Content: {1}'.format(response.status_code, response.content))
 
@@ -1054,7 +1058,7 @@ if startrunspecific == "" and teststorun == "all" and rerun == "true":
 #./RunTestsWithAppsurify.sh --url "https://demo.appsurify.com" --apikey "MTU6a3Q1LUlTU3ZEcktFSTFhQUNoYy1DU3pidkdz" --project "Spirent Demo" --testsuite "Unit" --report "c:\testresults\GroupedTests1.xml" --teststorun "all" --commit "44e9b51296e41e044e45b81e0ef65e9dc4c3bc23"
 #python RunTestsWithAppsurify.py --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test"
 
-run_id=""
+#run_id=""
 
 #$url $apiKey $project $testsuite $fail $additionalargs $endrun $testseparator $postfixtest $prefixtest $startrun $fullnameseparator $fullname $failfast $maxrerun $rerun $importtype $teststorun $reporttype $report $commit $run_id
 echo("Getting tests to run")

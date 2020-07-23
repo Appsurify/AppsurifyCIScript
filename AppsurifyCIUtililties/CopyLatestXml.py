@@ -42,7 +42,9 @@ if not os.path.exists(outputFolder):
         os.makedirs(outputFolder)
 
 files = os.listdir(inputFolder)
+print(files)
 paths = [os.path.join(inputFolder, basename) for basename in files]
+print(paths)
 
 latestFolder = (max(paths, key=os.path.getctime))
 fileToCopy = os.path.join(latestFolder, fileName)
