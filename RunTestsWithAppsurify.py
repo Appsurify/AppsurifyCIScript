@@ -809,6 +809,20 @@ if testtemplate == "mstest":
     report=testtemplatearg1
     importtype="trx"
 
+
+#vstest
+#/Tests:TestMethod1,testMethod2
+#vstest.console.exe"  /testcontainer:"%WORKSPACE%\MYPROJECT\bin\debug\MYTEST.dll" /test:"ABC" /resultsfile:"%WORKSPACE%\result_%BUILD_NUMBER%.xml"
+if testtemplate == "vstest":
+    testseparator=","
+    reporttype="file"
+    startrunspecific="vstest.console.exe /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
+    postfixtest="'"
+    prefixtest="'"
+    startrunall="vstest.console.exe /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
+    report=testtemplatearg1
+    importtype="trx"
+
 #Jasmine3
 #npm install -g jasmine-xml-reporter for jasmine 2.x then use --junitreport and --output to determine where to output the report.
 #npm install -g jasmine-junit-reporter requires jasmine --reporter=jasmine-junit-reporter creates file junit_report

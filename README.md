@@ -31,7 +31,7 @@
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests (defaults to fail on all failures, unless overwritten), no tests (will fail on any failures, unless overwritten), prioritized tests with unassigned (will only fail on new or reopened defects, unless overwritten), prioritized tests without unassigned (will only fail on new or reopened defects, unless overwritten).  See [below](#teststorun) for details |
-| testtemplate | Options - mvn, cucumber mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, katalon, opentest.  See [below](#testtemplate) for usage details |
+| testtemplate | Options - mvn, cucumber mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, vstest, katalon, opentest.  See [below](#testtemplate) for usage details |
 | testtemplatearg1-4 | Additional argumentsfor the specified test template |
 
 ## <a id="testtemplate"></a>Parameter Details - testtemplate
@@ -238,6 +238,23 @@ The following values are set when this testtemplate is selected
 - postfixtest="'"
 - prefixtest="'"
 - startrunall="mstest /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
+- report=testtemplatearg1
+- importtype="trx"
+
+</details>
+
+<details>
+  <summary>VSTest</summary>
+
+### VSTest
+#### Parameter value - "vstest"
+The following values are set when this testtemplate is selected
+- testseparator=","
+- reporttype="file"
+- startrunspecific="vstest.console.exe /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'" + "/tests:"
+- postfixtest="'"
+- prefixtest="'"
+- startrunall="vstest.console.exe /resultsfile:'" + testtemplatearg1 + "' /testcontainer:'" + testtemplatearg2 + "'"
 - report=testtemplatearg1
 - importtype="trx"
 
