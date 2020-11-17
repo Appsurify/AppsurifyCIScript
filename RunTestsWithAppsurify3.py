@@ -9,6 +9,7 @@ import subprocess
 import shutil
 import json
 import requests
+from requests.auth import HTTPProxyAuth
 import csv
 from shutil import copyfile
 from xml.etree.ElementTree import ElementTree
@@ -662,7 +663,16 @@ if runtemplate == "no tests":
     teststorun="none"
     fail="newdefects, reopeneddefects, failedtests, brokentests"
 
-if testtemplate == "all tests":
+if runtemplate == "none":
+    teststorun="none"
+    fail="newdefects, reopeneddefects, failedtests, brokentests"
+    
+
+if runtemplate == "all tests":
+    teststorun="all"
+    fail="newdefects, reopeneddefects, failedtests, brokentests"
+
+if runtemplate == "all":
     teststorun="all"
     fail="newdefects, reopeneddefects, failedtests, brokentests"
 
@@ -1118,7 +1128,7 @@ if startrunspecific == "" and teststorun == "all" and rerun == "true":
 ####example RunTestsWithAppsurify.sh --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "mvn -tests" 
 #example RunTestsWithAppsurify.sh --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --report "report" --teststorun "all" --startrun "C:\apache\apache-maven-3.5.0\bin\mvn tests " 
 #./RunTestsWithAppsurify.sh --url "https://demo.appsurify.com" --apikey "MTU6a3Q1LUlTU3ZEcktFSTFhQUNoYy1DU3pidkdz" --project "Spirent Demo" --testsuite "Unit" --report "c:\testresults\GroupedTests1.xml" --teststorun "all" --commit "44e9b51296e41e044e45b81e0ef65e9dc4c3bc23"
-#python RunTestsWithAppsurify.py --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --runtemplate "no tests" --testtemplate "mvn"
+#python3 RunTestsWithAppsurify3.py --url "http://appsurify.dev.appsurify.com" --apikey "MTpEbzhXQThOaW14bHVQTVdZZXNBTTVLT0xhZ00" --project "Test" --testsuite "Test" --runtemplate "no tests" --testtemplate "mvn"
 
 #run_id=""
 

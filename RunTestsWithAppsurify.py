@@ -627,7 +627,15 @@ if runtemplate == "no tests":
     teststorun="none"
     fail="newdefects, reopeneddefects, failedtests, brokentests"
 
-if testtemplate == "all tests":
+if runtemplate == "none":
+    teststorun="none"
+    fail="newdefects, reopeneddefects, failedtests, brokentests"
+
+if runtemplate == "all tests":
+    teststorun="all"
+    fail="newdefects, reopeneddefects, failedtests, brokentests"
+
+if runtemplate == "all":
     teststorun="all"
     fail="newdefects, reopeneddefects, failedtests, brokentests"
 
