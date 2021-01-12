@@ -723,6 +723,17 @@ if testtemplate == "sahi testrunner":
     startrunspecific="testrunner temp.dd.csv"
     startrunall="testrunner " + testtemplatearg2
     report=testtemplatearg1
+#https://stackoverflow.com/questions/22505533/how-to-run-only-one-unit-test-class-using-gradle
+if testtemplate == "gradle":
+    testseparator="--test "
+    addtestsuitename="true"
+    testsuitesnameseparator="."
+    startrunspecific="gradle test --test '"
+    endrunspecific="'"
+    startrunall="gradle test"
+    report="./build/test-results/"
+    reporttype="directory"
+    deletereports="true"
 
 if testtemplate == "mvn":
     testseparator=","
@@ -734,6 +745,16 @@ if testtemplate == "mvn":
     report="./target/surefire-reports/"
     reporttype="directory"
     deletereports="true"
+
+if testtemplate == "webdriverio mocha":
+    testseparator="|"
+    reporttype="file"
+    report="test-results.xml"
+    startrunspecific="wdio  -g '"
+    endrunspecific = "'"
+    postfixtest="$"
+    prefixtest="^"
+    startrunall="wdio test "
 
 
 #mvn test -Dcucumber.options="--name 'another scenario' --name '^a few cukes$'"
@@ -780,7 +801,8 @@ if testtemplate == "mocha":
     testseparator="|"
     reporttype="file"
     report="test-results.xml"
-    startrunspecific="mocha test --reporter mocha-junit-reporter -g "
+    startrunspecific="mocha test --reporter mocha-junit-reporter -g '"
+    endrunspecific = "'"
     postfixtest="$"
     prefixtest="^"
     startrunall="mocha test --reporter mocha-junit-reporter "
