@@ -67,6 +67,7 @@ runtestswithappsurify --url "https://dummy.appsurify.com" --apikey "apikeyvalue"
 | maxrerun | 3 | the number of times failed tests should be rerun |
 | failfast | "false" | whether after each set of test runs to determine if the build has failed (tests will still be rerun if this has been selected) |
 | executioncommand | "" | Command to be executed following completion of the script [[teststorun]] will be replaced with the formatted list of tests to run |
+| percentage | "" | Percentage of tests to be run if prioritized tests is selected in the runtemplate |
 
 For CI specific integrations please contact Appsurify
 
