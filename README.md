@@ -40,7 +40,7 @@ pip install appsurifyci --upgrade
 | argument | options |
 | --- | --- |
 | runtemplate  | Options - all tests, no tests (used just to push results from the prior command), prioritized tests (requires --percentage argument to be added and the percentage of tests to be run.  See [below](#teststorun) for details |
-| testtemplate | Options - mvn, cucumber mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, vstest, katalon, opentest.  See [below](#testtemplate) for usage details |
+| testtemplate | Options - mvn, cucumber mvn, sahi testrunner, sahi ant, testim, mocha, pytest, rspec, robotframework, cyprus, mstest, vstest, katalon, opentest.  For additional integrations talk to the Appsurify team |
 | runcommand | Command to execute tests in the target environment, if command is custom to your test suite |
 | report | Location of xml reports created by the test run if this is not the default location for the test type |
 
