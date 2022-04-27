@@ -19,7 +19,7 @@ See - https://github.com/Appsurify/AppsurifyScriptInstallation
 
 Python 3.6+
 
-### Command
+### Installation Command
 
 pip install appsurifyci --upgrade
 
