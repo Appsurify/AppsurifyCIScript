@@ -27,7 +27,7 @@ pip install appsurifyci --upgrade
 | argument | options |
 | --- | --- |
 | apikey | Apikey from appsurify |
-| url | Url of the appsurify instance i.e. "https://dummy.appsurify.com" do not end with a / |
+| url | Url of the appsurify instance i.e. "https://dummy.appsurify.com"|
 | project | Name of the project |
 | testsuite | Name of the testsuite |
 | branch | Name of the branch the tests are running against |
