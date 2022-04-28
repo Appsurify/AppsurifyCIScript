@@ -1,4 +1,4 @@
-See - https://github.com/Appsurify/AppsurifyScriptInstallation
+See - https://github.com/Appsurify/AppsurifyTestScript
 
 # Appsurify Script Installation
 
