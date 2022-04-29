@@ -68,6 +68,7 @@ runtestswithappsurify --url "https://dummy.appsurify.com" --apikey "apikeyvalue"
 | failfast | "false" | whether after each set of test runs to determine if the build has failed (tests will still be rerun if this has been selected) |
 | executioncommand | "" | Command to be executed following completion of the script [[teststorun]] will be replaced with the formatted list of tests to run |
 | percentage | "" | Percentage of tests to be run if prioritized tests is selected in the runtemplate |
+| weekendrunall | "false" | Run all tests on the weekend |
 
 For CI specific integrations please contact Appsurify
 
