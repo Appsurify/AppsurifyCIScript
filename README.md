@@ -56,7 +56,7 @@ pip install appsurifyci --upgrade
 
 ## <a id="example_usage"></a>Example Usage
 
-runtestswithappsurify --url "https://dummy.appsurify.com" --apikey "apikeyvalue" --project "Test" --testsuite "Test" --runtemplate "prioritized tests" --testtemplate "mvn" --percentage "20"
+runtestswithappsurify --url "https://dummy.appsurify.com" --apikey "$APIKEY" --project "$PROJECT" --testsuite "$TESTSUITE" --runtemplate "prioritized tests" --testtemplate "mvn" --percentage "20" --commit "$COMMIT" --branch "$BRANCH"
 
 ## <a id="additional_arguments"></a>Additional Arguments - For Customization
 
